@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\NLib">
+      <UniqueIdentifier>{193d8626-951b-403b-ac2c-7a538be18c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\NLib\src">
+      <UniqueIdentifier>{73c72c81-0359-484e-8feb-2deef9280f25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\NLib\math">
+      <UniqueIdentifier>{80fe6a2c-6dbb-43d5-9b7e-317866dff2ba}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\NLib\nAssert.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nBase.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nBitmap.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nDataQueue.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nErrors.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nLogger.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nMath.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nString.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nArray.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nVector.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nStableVector.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\nMemory.hpp">
+      <Filter>source\NLib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\NLib\src\nAssert.cpp">
+      <Filter>source\NLib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\NLib\src\nLogger.cpp">
+      <Filter>source\NLib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\NLib\src\nMath.cpp">
+      <Filter>source\NLib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\NLib\src\nMemory.cpp">
+      <Filter>source\NLib\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\NLib\math\nMMatrix.inl">
+      <Filter>source\NLib\math</Filter>
+    </None>
+    <None Include="..\..\src\NLib\math\nMTransforms.inl">
+      <Filter>source\NLib\math</Filter>
+    </None>
+    <None Include="..\..\src\NLib\math\nMUtilities.inl">
+      <Filter>source\NLib\math</Filter>
+    </None>
+    <None Include="..\..\src\NLib\math\nMVector.inl">
+      <Filter>source\NLib\math</Filter>
+    </None>
+    <None Include="..\..\src\NLib\math\nMVector2f.inl">
+      <Filter>source\NLib\math</Filter>
+    </None>
+    <None Include="..\..\src\NLib\math\nMVector3f.inl">
+      <Filter>source\NLib\math</Filter>
+    </None>
+    <None Include="..\..\src\NLib\math\nMVector4f.inl">
+      <Filter>source\NLib\math</Filter>
+    </None>
+  </ItemGroup>
+</Project>
