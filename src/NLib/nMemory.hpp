@@ -21,26 +21,31 @@ namespace NIne
 		NUint8	uPool[uChunkSize - sizeof(ChunkTemplate<uChunkSize>*)];
 	};
 
+#ifdef _WIN64
+	typedef ChunkTemplate<16> MemoryChunk;
+#else
 	typedef ChunkTemplate<8> MemoryChunk;
+#endif
 
 	class NMemory
 	{
 	public:
-		NRESULT initMemory(NSize_t uReservationSize = 0);
+		NMemory();
+		~NMemory();
 
-		void* allocate(NSize_t uAllocationSize);
-		//void* allocate(NSize_t uAllocationSize, NSize_t uAlignment);
-		void release(void* pMemory);
+		NRESULT initMemory(NSize_t uReservationSize = 0);
+		void	releaseMemory();
+
+		void*	allocate(NSize_t uAllocationSize);
+		void*	allocate(NSize_t uAllocationSize, NSize_t uAlignment);
+		void	release(void* pMemory);
 
 		NSize_t getChunksCount() const				{ return m_uNumChunks; }
 		NSize_t getAllocatedChunksCount() const		{ return m_uNumUsedChunks; }
 
-		bool outOfMemory()	{ return m_bOutOfMemory; }
+		bool	outOfMemory()	{ return m_bOutOfMemory; }
 
 	private:
-		NMemory();
-		~NMemory();
-
 		MemoryChunk*	allocateChunks(NSize_t uAllocSize);		// Must be complemented to chunks
 		void			appendChunks(MemoryChunk* pChunks, NSize_t uNumChunks);
 		void			releaseChunks();
@@ -58,3 +63,13 @@ namespace NIne
 		static NMemory m_instance;
 	};
 }
+
+#define NMemoryInit				NMemory::m_instance.initMemory
+#define NMemoryReleaseAll		NMemory::m_instance.releaseMemory
+#define NMemoryAllocate			NMemory::m_instance.allocate
+#define NMemoryRelease			NMemory::m_instance.release
+
+#define NMemoryGetChunksCount			NMemory::m_instance.getChunksCount
+#define NMemoryGetAllocatedChunksCount	NMemory::m_instance.getAllocatedChunksCount
+
+#define NMemoryOutOfMemory	NMemory::m_instance.outOfMemory

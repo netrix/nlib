@@ -1,4 +1,6 @@
 #include "../nMemory.hpp"
+#include "../nLogger.hpp"
+#include "../nAssert.hpp"
 
 namespace
 {
@@ -8,47 +10,61 @@ namespace
 	}
 }
 
-/*	Dopisac wyjœcie do Loga
- *
- */
-
 namespace NIne
 {
 	NMemory NMemory::m_instance;
 
-	/*************************************/
+	/***********************************************************************/
 	NMemory::NMemory()	: m_pHeads(null)
 	{
 	}
-	/*************************************/
+	/***********************************************************************/
 	NMemory::~NMemory()
 	{
 		releaseChunks();
 	}
-	/*************************************/
+	/***********************************************************************/
 	NRESULT NMemory::initMemory(NSize_t uReservationSize)
 	{
+		NAssert(uReservationSize > 0, "Invalid parameter");
+
 		m_bOutOfMemory = false;
 		m_uNumUsedChunks = 0;
 		m_uNumChunks = 0;
 
 		uReservationSize = ComplementTo8(uReservationSize);
 
+		NLogMessage("Initializing memory");
+
 		m_pFreeChunks = allocateChunks(uReservationSize);
-		if(m_pFreeChunks == null)	{ return NRV_OUT_OF_MEMORY; }
+		if(m_pFreeChunks == null)	{ return NRV_OUT_OF_MEMORY;	}
 
 		return NRV_SUCCESS;
 	}
-	/*************************************/
+	/***********************************************************************/
+	void NMemory::releaseMemory()
+	{
+		releaseChunks();
+		m_pHeads = null;
+	}
+	/***********************************************************************/
 	MemoryChunk* NMemory::allocateChunks(NSize_t uAllocSize)
 	{
+		// Allocating additional space for Head chunk
+		uAllocSize += sizeof(MemoryChunk);
+
+		NLogMessage("Allocating memory, size: %u bytes... ", uAllocSize);
+
 		// Allocating memory
 		void* pMemory = malloc(uAllocSize);
 		if(pMemory == null)
 		{
 			m_bOutOfMemory = true;
+			NLogMessage("Failed\n");
 			return null;
 		}
+
+		NLogMessage("OK\n");
 
 		NSize_t uAllocedChunks = uAllocSize / sizeof(MemoryChunk);
 
@@ -70,6 +86,7 @@ namespace NIne
 		pFreeChunks = pFreeChunks->pNext;
 		pHead->pNext = null;
 		pHead->uNumChunks = m_uNumChunks;
+		++m_uNumUsedChunks;
 
 		// Adding Head to memory list
 		if(m_pHeads == null)	{ m_pHeads = pHead; }// First use case
@@ -83,7 +100,7 @@ namespace NIne
 
 		return pFreeChunks;
 	}
-	/*************************************/
+	/***********************************************************************/
 	void NMemory::appendChunks(MemoryChunk* pChunks, NSize_t uNumChunks)
 	{
 		if(m_pFreeChunks == null)
@@ -98,7 +115,7 @@ namespace NIne
 		else
 		{
 			MemoryChunk* pFreeChunks = m_pFreeChunks;
-			while(pFreeChunks->pNext < pChunks)
+			while(pFreeChunks->pNext != null && pFreeChunks->pNext < pChunks)
 			{
 				pFreeChunks = pFreeChunks->pNext;
 			}
@@ -107,9 +124,11 @@ namespace NIne
 			pFreeChunks->pNext = pChunks;
 		}
 	}
-	/*************************************/
+	/***********************************************************************/
 	void NMemory::releaseChunks()
 	{
+		NLogMessage("Releasing memory");
+
 		while(m_pHeads != null)
 		{
 			ChunkHead* pHead = m_pHeads;
@@ -117,19 +136,25 @@ namespace NIne
 			free(pHead);
 		}
 	}
-	/*************************************/
+	/***********************************************************************/
 	void* NMemory::allocate(NSize_t uAllocationSize)
 	{
-		NSize_t uRealSize = uAllocationSize + sizeof(NSize_t);
+		NAssert(uAllocationSize > 0, "Invalid parameter");
+
+		NSize_t  uRealSize = uAllocationSize + sizeof(NSize_t);
 		NSize_t* pSizePointer = null;
 
 		if(uRealSize <= sizeof(MemoryChunk))
 		{
-			if(m_pFreeChunks == null)	{ m_pFreeChunks = allocateChunks(m_uNumChunks * sizeof(MemoryChunk)); }
+			if(m_pFreeChunks == null)
+			{
+				m_pFreeChunks = allocateChunks(m_uNumChunks * sizeof(MemoryChunk));
+			}
 
 			pSizePointer = (NSize_t*)m_pFreeChunks;
-			m_uNumUsedChunks++;
 			m_pFreeChunks = m_pFreeChunks->pNext;
+			*pSizePointer = 1;
+			m_uNumUsedChunks++;
 		}
 		else
 		{
@@ -143,7 +168,7 @@ namespace NIne
 
 			while(pChunk != null && uContChunks != uNumChunks)
 			{
-				if(pChunk - pFirst == uContChunks)	{ uContChunks++; }
+				if((NSize_t)(pChunk - pFirst) == uContChunks)	{ uContChunks++; }
 				else
 				{
 					pFirst = pChunk;
@@ -179,7 +204,76 @@ namespace NIne
 
 		return pSizePointer != null ? pSizePointer + 1 : null;
 	}
-	/*************************************/
+	/***********************************************************************/
+	void* NMemory::allocate(NSize_t uAllocationSize, NSize_t uAlignment)
+	{
+		NAssert(uAllocationSize > 0, "Invalid parameter");
+		NAssert((uAlignment & (uAlignment - 1)) == 0, "uAlignment must be power of 2");
+
+		NSize_t uRealSize = uAllocationSize + sizeof(NSize_t) + uAlignment;	// This approach uses additional memory even if it is no necessary
+		NSize_t* pSizePointer = null;
+
+		if(uRealSize <= sizeof(MemoryChunk))
+		{
+			if(m_pFreeChunks == null)
+			{
+				m_pFreeChunks = allocateChunks(m_uNumChunks * sizeof(MemoryChunk));
+			}
+
+			pSizePointer = (NSize_t*)m_pFreeChunks;
+			m_pFreeChunks = m_pFreeChunks->pNext;
+			*pSizePointer = 1;
+			m_uNumUsedChunks++;
+		}
+		else
+		{
+			// Determining chunks count
+			NSize_t uNumChunks = ComplementTo8(uRealSize) / sizeof(MemoryChunk);
+
+			// Looking for continuous memory
+			NSize_t uContChunks = 1;
+			MemoryChunk* pFirst = m_pFreeChunks;
+			MemoryChunk* pChunk = pFirst->pNext;
+
+			while(pChunk != null && uContChunks != uNumChunks)
+			{
+				if((NSize_t)(pChunk - pFirst) == uContChunks)	{ uContChunks++; }
+				else
+				{
+					pFirst = pChunk;
+					uContChunks = 1;
+				}
+
+				pChunk = pChunk->pNext;
+			}
+
+			// Found or not
+			if(uContChunks != uNumChunks)
+			{
+				NSize_t uReservationSize = ComplementTo8(max(uRealSize, m_uNumChunks * sizeof(MemoryChunk)));
+
+				MemoryChunk* pNewChunks = allocateChunks(uReservationSize);
+
+				// Reserving first chunks
+				pSizePointer = (NSize_t*)pNewChunks;
+				*pSizePointer = uNumChunks;
+				m_uNumUsedChunks += uNumChunks;
+				pNewChunks = pNewChunks + uNumChunks;
+
+				appendChunks(pNewChunks, uReservationSize / sizeof(MemoryChunk) - uNumChunks);
+			}
+			else
+			{
+				pSizePointer = (NSize_t*)pFirst;
+				*pSizePointer = uNumChunks;
+				m_uNumUsedChunks += uNumChunks;
+				m_pFreeChunks = pChunk;
+			}
+		}
+
+		return pSizePointer != null ? pSizePointer + 1 : null;
+	}
+	/***********************************************************************/
 	void NMemory::release(void* pMemory)
 	{
 		// Fixing chunks
@@ -203,7 +297,7 @@ namespace NIne
 		{
 			MemoryChunk* pFreeChunks = m_pFreeChunks;
 
-			while(pFreeChunks->pNext < pFirst)
+			while(pFreeChunks->pNext != null && pFreeChunks->pNext < pFirst)
 			{
 				pFreeChunks = pFreeChunks->pNext;
 			}

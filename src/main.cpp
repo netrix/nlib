@@ -1,14 +1,23 @@
-#include <stdio.h>
-#include "NLib/nMemory.hpp"
+#include "nTestGroupMemory.hpp"
+
+#include <tut_reporter.h>
+#include "NLib/nLogger.hpp"
+
 using namespace NIne;
+
+namespace tut
+{
+	test_runner_singleton runner;
+}
 
 int main()
 {
-	NMemory::m_instance.initMemory(256);
+	NLogInit("NLib.log");
 
-	void* pMemory = NMemory::m_instance.allocate(128);
+	tut::reporter reporter;					// xml_reporter !!!
 
-	NMemory::m_instance.release(pMemory);
+	tut::runner.get().set_callback(&reporter);
+	tut::runner.get().run_tests();
 
-	return 0;
+	return !reporter.all_ok();
 }
