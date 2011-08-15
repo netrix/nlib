@@ -14,18 +14,11 @@ namespace NIne
 		NIne::NSize_t uNumChunks;
 	};
 
-	template<NSize_t uChunkSize>
-	struct ChunkTemplate
+	struct MemoryChunk
 	{
-		ChunkTemplate<uChunkSize>* pNext;
-		NUint8	uPool[uChunkSize - sizeof(ChunkTemplate<uChunkSize>*)];
+		MemoryChunk*	pNext;
+		NSize_t			uContinuousCount;
 	};
-
-#ifdef _WIN64
-	typedef ChunkTemplate<16> MemoryChunk;
-#else
-	typedef ChunkTemplate<8> MemoryChunk;
-#endif
 
 	class NMemory
 	{

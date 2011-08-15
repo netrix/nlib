@@ -19,5 +19,8 @@ int main()
 	tut::runner.get().set_callback(&reporter);
 	tut::runner.get().run_tests();
 
+	//tut::test_result result;
+	//tut::runner.get().run_test("Memory manager tests", 17, result);
+
 	return !reporter.all_ok();
 }

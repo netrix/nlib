@@ -98,6 +98,9 @@ namespace NIne
 
 		m_uNumChunks += uAllocedChunks;
 
+		// Setting continuity information
+		pFreeChunks->uContinuousCount = uAllocedChunks - 2;
+
 		return pFreeChunks;
 	}
 	/***********************************************************************/
@@ -151,6 +154,9 @@ namespace NIne
 				m_pFreeChunks = allocateChunks(m_uNumChunks * sizeof(MemoryChunk));
 			}
 
+			// Updating continuous counter
+			if(m_pFreeChunks->uContinuousCount > 0)	{ m_pFreeChunks->pNext->uContinuousCount = m_pFreeChunks->uContinuousCount - 1; }
+
 			pSizePointer = (NSize_t*)m_pFreeChunks;
 			m_pFreeChunks = m_pFreeChunks->pNext;
 			*pSizePointer = 1;
@@ -161,29 +167,24 @@ namespace NIne
 			// Determining chunks count
 			NSize_t uNumChunks = ComplementTo8(uRealSize) / sizeof(MemoryChunk);
 
-			// Looking for continuous memory
-			NSize_t uContChunks = 1;
+			// Looking for enough continuous memory
 			MemoryChunk* pFirst = m_pFreeChunks;
-			MemoryChunk* pChunk = pFirst->pNext;
+			MemoryChunk* pPrevious = null;
 
-			while(pChunk != null && uContChunks != uNumChunks)
+			while(pFirst != null && pFirst->uContinuousCount < uNumChunks)
 			{
-				if((NSize_t)(pChunk - pFirst) == uContChunks)	{ uContChunks++; }
-				else
-				{
-					pFirst = pChunk;
-					uContChunks = 1;
-				}
-
-				pChunk = pChunk->pNext;
+				pPrevious = pFirst;
+				pFirst = (pFirst + pFirst->uContinuousCount)->pNext;
 			}
 
 			// Found or not
-			if(uContChunks != uNumChunks)
+			if(pFirst == null)
 			{
 				NSize_t uReservationSize = ComplementTo8(max(uRealSize, m_uNumChunks * sizeof(MemoryChunk)));
-
 				MemoryChunk* pNewChunks = allocateChunks(uReservationSize);
+
+				// Updating continuous counter
+				//if(pNewChunks->uContinuousCount > uNumChunks - 1)	{ (pNewChunks + uNumChunks)->uContinuousCount = pNewChunks->uContinuousCount - uNumChunks; }
 
 				// Reserving first chunks
 				pSizePointer = (NSize_t*)pNewChunks;
@@ -195,10 +196,16 @@ namespace NIne
 			}
 			else
 			{
+				// Updating continuous counter
+				if(pFirst->uContinuousCount > uNumChunks - 1)	{ (pFirst + uNumChunks)->uContinuousCount = pFirst->uContinuousCount - uNumChunks; }
+
 				pSizePointer = (NSize_t*)pFirst;
 				*pSizePointer = uNumChunks;
 				m_uNumUsedChunks += uNumChunks;
-				m_pFreeChunks = pChunk;
+
+				// Updating continuity of list
+				if(pPrevious == null)	{ m_pFreeChunks = pFirst + uNumChunks; }
+				else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = pFirst + uNumChunks; }
 			}
 		}
 
@@ -291,6 +298,7 @@ namespace NIne
 		if(m_pFreeChunks == null)
 		{
 			m_pFreeChunks = pFirst;
+			pFirst->uContinuousCount = uSize - 1;
 			(pChunk - 1)->pNext = null;
 		}
 		else
@@ -304,6 +312,9 @@ namespace NIne
 
 			(pChunk - 1)->pNext = pFreeChunks->pNext;
 			pFreeChunks->pNext = pFirst;
+
+			if(pChunk == pFreeChunks->pNext)	{ pFirst->uContinuousCount = uSize + pChunk->uContinuousCount; } // pChunk == pFreeChunks
+			else								{ pFirst->uContinuousCount = uSize - 1; }
 		}
 
 		m_uNumUsedChunks -= uSize;
