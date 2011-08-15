@@ -20,7 +20,7 @@ int main()
 	tut::runner.get().run_tests();
 
 	//tut::test_result result;
-	//tut::runner.get().run_test("Memory manager tests", 17, result);
+	//tut::runner.get().run_test("Memory manager tests", 23, result);
 
 	return !reporter.all_ok();
 }

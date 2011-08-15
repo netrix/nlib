@@ -104,16 +104,18 @@ namespace NIne
 		return pFreeChunks;
 	}
 	/***********************************************************************/
-	void NMemory::appendChunks(MemoryChunk* pChunks, NSize_t uNumChunks)
+	MemoryChunk* NMemory::appendChunks(MemoryChunk* pChunks, NSize_t uNumChunks)
 	{
 		if(m_pFreeChunks == null)
 		{
 			m_pFreeChunks = pChunks;
+			return null;
 		}
 		else if(pChunks < m_pFreeChunks)
 		{
 			(pChunks + uNumChunks - 1)->pNext = m_pFreeChunks;
 			m_pFreeChunks = pChunks;
+			return null;
 		}
 		else
 		{
@@ -125,6 +127,8 @@ namespace NIne
 
 			(pChunks + uNumChunks - 1)->pNext = pFreeChunks->pNext;
 			pFreeChunks->pNext = pChunks;
+			pFreeChunks->uContinuousCount = 0;
+			return pFreeChunks;
 		}
 	}
 	/***********************************************************************/
@@ -181,32 +185,21 @@ namespace NIne
 			if(pFirst == null)
 			{
 				NSize_t uReservationSize = ComplementTo8(max(uRealSize, m_uNumChunks * sizeof(MemoryChunk)));
-				MemoryChunk* pNewChunks = allocateChunks(uReservationSize);
-
-				// Updating continuous counter
-				//if(pNewChunks->uContinuousCount > uNumChunks - 1)	{ (pNewChunks + uNumChunks)->uContinuousCount = pNewChunks->uContinuousCount - uNumChunks; }
-
-				// Reserving first chunks
-				pSizePointer = (NSize_t*)pNewChunks;
-				*pSizePointer = uNumChunks;
-				m_uNumUsedChunks += uNumChunks;
-				pNewChunks = pNewChunks + uNumChunks;
-
-				appendChunks(pNewChunks, uReservationSize / sizeof(MemoryChunk) - uNumChunks);
+				pFirst = allocateChunks(uReservationSize);
+				pPrevious = appendChunks(pFirst, uReservationSize / sizeof(MemoryChunk) - uNumChunks);
 			}
-			else
-			{
-				// Updating continuous counter
-				if(pFirst->uContinuousCount > uNumChunks - 1)	{ (pFirst + uNumChunks)->uContinuousCount = pFirst->uContinuousCount - uNumChunks; }
 
-				pSizePointer = (NSize_t*)pFirst;
-				*pSizePointer = uNumChunks;
-				m_uNumUsedChunks += uNumChunks;
+			// Updating continuous counter
+			if(pFirst->uContinuousCount > uNumChunks - 1)	{ (pFirst + uNumChunks)->uContinuousCount = pFirst->uContinuousCount - uNumChunks; }
 
-				// Updating continuity of list
-				if(pPrevious == null)	{ m_pFreeChunks = pFirst + uNumChunks; }
-				else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = pFirst + uNumChunks; }
-			}
+			pSizePointer = (NSize_t*)pFirst;
+
+			// Updating continuity of list
+			if(pPrevious == null)	{ m_pFreeChunks = pFirst + uNumChunks; }
+			else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = pFirst + uNumChunks; }
+
+			*pSizePointer = uNumChunks;
+			m_uNumUsedChunks += uNumChunks;
 		}
 
 		return pSizePointer != null ? pSizePointer + 1 : null;
@@ -217,77 +210,78 @@ namespace NIne
 		NAssert(uAllocationSize > 0, "Invalid parameter");
 		NAssert((uAlignment & (uAlignment - 1)) == 0, "uAlignment must be power of 2");
 
-		NSize_t uRealSize = uAllocationSize + sizeof(NSize_t) + uAlignment;	// This approach uses additional memory even if it is no necessary
+		NSize_t uRealSize = uAllocationSize + sizeof(NSize_t);
+		NSize_t uAlignmentSize = uRealSize + uAlignment;
 		NSize_t* pSizePointer = null;
 
-		if(uRealSize <= sizeof(MemoryChunk))
+		// Determining chunks count
+		NSize_t uNumChunks = ComplementTo8(uAlignmentSize) / sizeof(MemoryChunk);
+
+		// Looking for enough continuous memory
+		MemoryChunk* pFirst = m_pFreeChunks;
+		MemoryChunk* pPrevious = null;
+
+		while(pFirst != null && pFirst->uContinuousCount < uNumChunks)
 		{
-			if(m_pFreeChunks == null)
-			{
-				m_pFreeChunks = allocateChunks(m_uNumChunks * sizeof(MemoryChunk));
-			}
-
-			pSizePointer = (NSize_t*)m_pFreeChunks;
-			m_pFreeChunks = m_pFreeChunks->pNext;
-			*pSizePointer = 1;
-			m_uNumUsedChunks++;
+			pPrevious = pFirst;
+			pFirst = (pFirst + pFirst->uContinuousCount)->pNext;
 		}
-		else
+
+		// Not found, adding additional space
+		if(pFirst == null)
 		{
-			// Determining chunks count
-			NSize_t uNumChunks = ComplementTo8(uRealSize) / sizeof(MemoryChunk);
-
-			// Looking for continuous memory
-			NSize_t uContChunks = 1;
-			MemoryChunk* pFirst = m_pFreeChunks;
-			MemoryChunk* pChunk = pFirst->pNext;
-
-			while(pChunk != null && uContChunks != uNumChunks)
-			{
-				if((NSize_t)(pChunk - pFirst) == uContChunks)	{ uContChunks++; }
-				else
-				{
-					pFirst = pChunk;
-					uContChunks = 1;
-				}
-
-				pChunk = pChunk->pNext;
-			}
-
-			// Found or not
-			if(uContChunks != uNumChunks)
-			{
-				NSize_t uReservationSize = ComplementTo8(max(uRealSize, m_uNumChunks * sizeof(MemoryChunk)));
-
-				MemoryChunk* pNewChunks = allocateChunks(uReservationSize);
-
-				// Reserving first chunks
-				pSizePointer = (NSize_t*)pNewChunks;
-				*pSizePointer = uNumChunks;
-				m_uNumUsedChunks += uNumChunks;
-				pNewChunks = pNewChunks + uNumChunks;
-
-				appendChunks(pNewChunks, uReservationSize / sizeof(MemoryChunk) - uNumChunks);
-			}
-			else
-			{
-				pSizePointer = (NSize_t*)pFirst;
-				*pSizePointer = uNumChunks;
-				m_uNumUsedChunks += uNumChunks;
-				m_pFreeChunks = pChunk;
-			}
+			NSize_t uReservationSize = ComplementTo8(max(uAlignmentSize, m_uNumChunks * sizeof(MemoryChunk)));
+			pFirst = allocateChunks(uReservationSize);
+			pPrevious = appendChunks(pFirst, uReservationSize / sizeof(MemoryChunk));
 		}
+
+		// Updating continuous counter
+		if(pFirst->uContinuousCount > uNumChunks - 1)	{ (pFirst + uNumChunks)->uContinuousCount = pFirst->uContinuousCount - uNumChunks; }
+
+		// Calculating offset
+		NSize_t uOffset	= (NSize_t)pFirst + sizeof(NSize_t);
+		NSize_t uAlignedOffset = (uOffset / uAlignment) * uAlignment;
+		uAlignedOffset = uAlignedOffset < uOffset ? uAlignedOffset + uAlignment : uAlignedOffset;
+
+		// If offset takes more block, there's no need to waste it
+		NSize_t uOffsetBlocks = (uAlignedOffset - uOffset + sizeof(NSize_t)) / sizeof(MemoryChunk);
+		if(uOffsetBlocks > 0)
+		{
+			// Updating continuous counter
+			pFirst->uContinuousCount = uOffsetBlocks - 1;
+			pPrevious = pFirst + uOffsetBlocks - 1;
+			pPrevious->uContinuousCount = 0;
+			pFirst = pFirst + uOffsetBlocks;
+			uNumChunks -= uOffsetBlocks;
+		}
+
+		// Updating continuity of list
+		if(pPrevious == null)	{ m_pFreeChunks = pFirst + uNumChunks; }
+		else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = pFirst + uNumChunks; }
+
+		pSizePointer = (NSize_t*)uAlignedOffset - 1;
+		*pSizePointer = uNumChunks - uOffsetBlocks;
+		m_uNumUsedChunks += *pSizePointer;
+
+		// Saving information about offset at the beginning of *pSizePointer
+		*pSizePointer |= ((NSize_t)pSizePointer - (NSize_t)pFirst) << (sizeof(NSize_t) * 8 - sizeof(MemoryChunk));
 
 		return pSizePointer != null ? pSizePointer + 1 : null;
 	}
 	/***********************************************************************/
 	void NMemory::release(void* pMemory)
 	{
+		// Getting size value
+		NSize_t* pOffset = (NSize_t*)pMemory - 1;
+		NSize_t uSize = *pOffset;
+
+		pOffset = (NSize_t*)((NSize_t)pOffset - (uSize >> (sizeof(NSize_t) * 8 - sizeof(MemoryChunk))));
+		uSize &= (1 << (sizeof(NSize_t) * 8 - sizeof(MemoryChunk))) - 1;
+
 		// Fixing chunks
-		MemoryChunk* pFirst = (MemoryChunk*)((NSize_t*)pMemory - 1);
+		MemoryChunk* pFirst = (MemoryChunk*)pOffset;
 		MemoryChunk* pChunk = pFirst;
 
-		NSize_t uSize = *(NSize_t*)pFirst;
 		for(NSize_t u = 0; u < uSize; ++u)
 		{
 			pChunk->pNext = pChunk + 1;

@@ -233,7 +233,9 @@ namespace tut
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
+	#ifndef OMIT_ASSERTS_TESTS
 		void* pMemory = memoryObject.allocate(41, 13);
+	#endif
 	}
 
 	template<>
