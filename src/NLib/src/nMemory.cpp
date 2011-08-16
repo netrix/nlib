@@ -244,7 +244,7 @@ namespace NIne
 		uAlignedOffset = uAlignedOffset < uOffset ? uAlignedOffset + uAlignment : uAlignedOffset;
 
 		// If offset takes more block, there's no need to waste it
-		NSize_t uOffsetBlocks = (uAlignedOffset - uOffset + sizeof(NSize_t)) / sizeof(MemoryChunk);
+		NSize_t uOffsetBlocks = (uAlignedOffset - uOffset) / sizeof(MemoryChunk);
 		if(uOffsetBlocks > 0)
 		{
 			// Updating continuous counter
@@ -284,7 +284,7 @@ namespace NIne
 
 		for(NSize_t u = 0; u < uSize; ++u)
 		{
-			pChunk->pNext = pChunk + 1;
+			pChunk->pNext = pChunk + 1;		// Can eliminate this due to the continuity of memory
 			pChunk++;
 		}
 

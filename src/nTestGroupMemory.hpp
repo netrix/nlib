@@ -13,14 +13,14 @@ namespace tut
 		NIne::NMemory memoryObject;
 	};
 
-	typedef test_group<MemoryTestData>	tg;
-	typedef tg::object					tgObject;
+	typedef test_group<MemoryTestData>	tgMemory;
+	typedef tgMemory::object			tgMemoryObject;
 
 	/**************************************************/
 	// Initiation tests
 	template<>
 	template<>
-	void tgObject::test<1>()
+	void tgMemoryObject::test<1>()
 	{
 	#ifndef OMIT_ASSERTS_TESTS
 		memoryObject.initMemory(0); // Raises an assert
@@ -29,49 +29,49 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<2>()
+	void tgMemoryObject::test<2>()
 	{
 		ensure_equals(memoryObject.initMemory(1), NIne::NRV_SUCCESS);
 	}
 
 	template<>
 	template<>
-	void tgObject::test<3>()
+	void tgMemoryObject::test<3>()
 	{
 		ensure_equals(memoryObject.initMemory(4), NIne::NRV_SUCCESS);
 	}
 
 	template<>
 	template<>
-	void tgObject::test<4>()
+	void tgMemoryObject::test<4>()
 	{
 		ensure_equals(memoryObject.initMemory(8), NIne::NRV_SUCCESS);
 	}
 
 	template<>
 	template<>
-	void tgObject::test<5>()
+	void tgMemoryObject::test<5>()
 	{
 		ensure_equals(memoryObject.initMemory(16), NIne::NRV_SUCCESS);
 	}
 
 	template<>
 	template<>
-	void tgObject::test<6>()
+	void tgMemoryObject::test<6>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 	}
 
 	template<>
 	template<>
-	void tgObject::test<7>()
+	void tgMemoryObject::test<7>()
 	{
 		ensure_equals(memoryObject.initMemory(4681), NIne::NRV_SUCCESS);
 	}
 
 	template<>
 	template<>
-	void tgObject::test<8>()
+	void tgMemoryObject::test<8>()
 	{
 		ensure_equals(memoryObject.initMemory(467489481), NIne::NRV_SUCCESS);
 	}
@@ -80,7 +80,7 @@ namespace tut
 	// Memory release tests
 	template<>
 	template<>
-	void tgObject::test<9>()
+	void tgMemoryObject::test<9>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 		memoryObject.releaseMemory();
@@ -90,7 +90,7 @@ namespace tut
 	// Allocation tests
 	template<>
 	template<>
-	void tgObject::test<10>()
+	void tgMemoryObject::test<10>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -101,7 +101,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<11>()
+	void tgMemoryObject::test<11>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -111,7 +111,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<12>()
+	void tgMemoryObject::test<12>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -121,7 +121,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<13>()
+	void tgMemoryObject::test<13>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -131,7 +131,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<14>()
+	void tgMemoryObject::test<14>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -141,7 +141,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<15>()
+	void tgMemoryObject::test<15>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -151,7 +151,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<16>()
+	void tgMemoryObject::test<16>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -161,7 +161,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<17>()
+	void tgMemoryObject::test<17>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -173,7 +173,7 @@ namespace tut
 	// Allocated release tests
 	template<>
 	template<>
-	void tgObject::test<18>()
+	void tgMemoryObject::test<18>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -185,7 +185,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<19>()
+	void tgMemoryObject::test<19>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -197,7 +197,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<20>()
+	void tgMemoryObject::test<20>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -212,7 +212,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<21>()
+	void tgMemoryObject::test<21>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -229,7 +229,7 @@ namespace tut
 	// Aligned allocation tests
 	template<>
 	template<>
-	void tgObject::test<22>()
+	void tgMemoryObject::test<22>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -240,7 +240,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<23>()
+	void tgMemoryObject::test<23>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -253,7 +253,7 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<24>()
+	void tgMemoryObject::test<24>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -266,7 +266,20 @@ namespace tut
 
 	template<>
 	template<>
-	void tgObject::test<25>()
+	void tgMemoryObject::test<25>()
+	{
+		ensure_equals(memoryObject.initMemory(1024), NIne::NRV_SUCCESS);
+
+		void* pMemory = memoryObject.allocate(413, 256);
+		ensure(pMemory != null);
+
+		NIne::NSize_t uVal = (NIne::NSize_t)pMemory;
+		ensure(((uVal >> 8) << 8) == uVal);
+	}
+
+	template<>
+	template<>
+	void tgMemoryObject::test<26>()
 	{
 		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
 
@@ -278,6 +291,33 @@ namespace tut
 	}
 
 	/**************************************************/
+	// info functions tests
+	template<>
+	template<>
+	void tgMemoryObject::test<27>()
+	{
+		ensure_equals(memoryObject.initMemory(256), NIne::NRV_SUCCESS);
+		NIne::NSize_t uChunks = memoryObject.getChunksCount();
+		void* pMemory = memoryObject.allocate(413, 256);
+
+		ensure(uChunks < memoryObject.getChunksCount());
+	}
+
+	template<>
+	template<>
+	void tgMemoryObject::test<28>()
+	{
+		ensure_equals(memoryObject.initMemory(1024), NIne::NRV_SUCCESS);
+
+		NIne::NSize_t uChunks = memoryObject.getAllocatedChunksCount();
+		void* pMemory = memoryObject.allocate(413, 256);
+
+		ensure(uChunks < memoryObject.getAllocatedChunksCount());
+		memoryObject.release(pMemory);
+		//ensure(uChunks == memoryObject.getAllocatedChunksCount());
+	}
+
+	/**************************************************/
 	// Object
-	tg testGroupMemory("Memory manager tests");
+	tgMemory testGroupMemory("Memory manager tests");
 }

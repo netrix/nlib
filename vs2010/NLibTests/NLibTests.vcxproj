@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\nTestGroupArray.hpp" />
     <ClInclude Include="..\..\src\nTestGroupMemory.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

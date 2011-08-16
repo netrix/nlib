@@ -1,4 +1,5 @@
 #include "nTestGroupMemory.hpp"
+#include "nTestGroupArray.hpp"
 
 #include <tut_reporter.h>
 #include "NLib/nLogger.hpp"
@@ -18,9 +19,6 @@ int main()
 
 	tut::runner.get().set_callback(&reporter);
 	tut::runner.get().run_tests();
-
-	//tut::test_result result;
-	//tut::runner.get().run_test("Memory manager tests", 23, result);
 
 	return !reporter.all_ok();
 }

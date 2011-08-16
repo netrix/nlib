@@ -1,8 +1,7 @@
 #pragma once
 
-#include "nBase.hpp"
-#include "nAssert.hpp"
-#include "nErrors.hpp"
+#include "nMemory.hpp"	// nBase.hpp, nErrors.hpp
+#include "nAssert.hpp"	// nBase.hpp
 #include <string.h>		// memcpy
 
 namespace NIne
@@ -13,10 +12,10 @@ namespace NIne
 	public:
 		NArray()	: m_pData(null), m_uSize(0)		{ }
 
-		NRESULT		create(NSize_t uSize);
-		NRESULT		create(const NArray<Type>& src);
+		void		create(NSize_t uSize);
+		void		create(const NArray<Type, ALIGN_SIZE>& src);
 
-		NRESULT		resize(NSize_t uSize);
+		void		resize(NSize_t uSize);
 
 		void		release();
 
@@ -35,91 +34,74 @@ namespace NIne
 		NSize_t m_uSize;
 	};
 
-	template<typename Type>
-	NRESULT NArray<Type>::create(NSize_t uSize)
+	template<typename Type, unsigned ALIGN_SIZE>
+	void NArray<Type, ALIGN_SIZE>::create(NSize_t uSize)
 	{
 		NAssert(m_pData == null, "Buffer already allocated");
 		NAssert(uSize > 0, "uSize is too small");
 
 		// This is should be optimized by compiler
-		if(ALIGN_SIZE == 0)		{ m_pData = NNEW Type[uSize]; }
-		else					{ NAlignedAlloc(&m_pData, uSize * sizeof(Type), ALIGN_SIZE); }
-
-		if(m_pData == null)		{ return NRV_OUT_OF_MEMORY;	}
+		if(ALIGN_SIZE == 0)		{ m_pData = (Type*)NMemoryAllocate(uSize * sizeof(Type)); }
+		else					{ m_pData = (Type*)NMemoryAllocate(uSize * sizeof(Type), ALIGN_SIZE); }
 
 		m_uSize = uSize;
-		return NRV_SUCCESS;
 	}
 
-	template<typename Type>
-	NRESULT NArray<Type>::create(const NArray<Type>& src)
+	template<typename Type, unsigned ALIGN_SIZE>
+	void NArray<Type, ALIGN_SIZE>::create(const NArray<Type, ALIGN_SIZE>& src)
 	{
 		NAssert(m_pData == null, "Buffer already allocated");
 
 		if(src.m_uSize > 0)
 		{
 			// This is should be optimized by compiler
-			if(ALIGN_SIZE == 0)		{ m_pData = NNEW Type[src.m_uSize]; }
-			else					{ NAlignedAlloc(&m_pData, src.m_uSize * sizeof(Type), ALIGN_SIZE); }
-
-			if(m_pData == null)		{ return NRV_OUT_OF_MEMORY;	}
+			if(ALIGN_SIZE == 0)		{ m_pData = (Type*)NMemoryAllocate(src.m_uSize * sizeof(Type)); }
+			else					{ m_pData = (Type*)NMemoryAllocate(src.m_uSize * sizeof(Type), ALIGN_SIZE); }
 
 			m_uSize = src.m_uSize;
 			memcpy(m_pData, src.m_pData, m_uSize * sizeof(Type));
 		}
 		else	{ m_pData = null; }
-
-		return NRV_SUCCESS;
 	}
 
-	template<typename Type>
-	NRESULT NArray<Type>::resize(NSize_t uSize)
+	template<typename Type, unsigned ALIGN_SIZE>
+	void NArray<Type, ALIGN_SIZE>::resize(NSize_t uSize)
 	{
 		NAssert(m_pData != null, "Buffer not allocated");
 		NAssert(uSize > 0, "uSize is too small");
 
-		if(uSize == m_uSize)	{ return NRV_SUCCESS; }
+		if(uSize == m_uSize)	{ return; }
 
 		// This is should be optimized by compiler
-		if(ALIGN_SIZE == 0)		{ m_pData = NNEW Type[uSize]; }
-		else					{ NAlignedAlloc(&m_pData, uSize * sizeof(Type), ALIGN_SIZE); }
+		Type* pData;
+		if(ALIGN_SIZE == 0)		{ pData = (Type*)NMemoryAllocate(uSize * sizeof(Type)); }
+		else					{ pData = (Type*)NMemoryAllocate(uSize * sizeof(Type), ALIGN_SIZE); }
 
-		if(pBuffer == null)		{ return NRV_OUT_OF_MEMORY;	}
-
-		memcpy(pBuffer, m_pData, m_uSize * sizeof(Type));
+		memcpy(pData, m_pData, m_uSize * sizeof(Type));
 		delete [] m_pData;
 
-		m_pData = pBuffer;
+		m_pData = pData;
 		m_uSize = uSize;
-		return NRV_SUCCESS;
 	}
 
-	template<typename Type>
-	void NArray<Type>::release()
+	template<typename Type, unsigned ALIGN_SIZE>
+	void NArray<Type, ALIGN_SIZE>::release()
 	{
-		if(ALIGN_SIZE == 0) { NDELETEARRNULL(m_pData); }
-		else
-		{
-			if(m_pData != null)
-			{
-				NAlignedFree(m_pData);
-				m_pData = null;
-			}
-		}
-
+		NMemoryRelease(m_pData);
+		m_pData = null;
 		m_uSize = 0;
 	}
 
-	template<typename Type>
-	const Type& NArray<Type>::operator[](NSize_t uIndex) const
+	template<typename Type, unsigned ALIGN_SIZE>
+	const Type& NArray<Type, ALIGN_SIZE>::operator[](NSize_t uIndex) const
 	{
 		NAssert(uIndex < m_uSize, "Index out of bounds");
 
 		return m_pData[uIndex];
 	}
 
-	template<typename Type>
-	Type& NArray<Type>::operator[](NSize_t uIndex)
+	template<typename Type, unsigned ALIGN_SIZE>
+	Type& NArray<Type, ALIGN_SIZE>::operator[](NSize_t uIndex)
 	{
 		NAssert(uIndex < m_uSize, "Index out of bounds");
 
