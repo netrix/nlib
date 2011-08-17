@@ -1,7 +1,7 @@
 #pragma once
 #include "nArray.hpp"
 
-namespace NIne
+namespace NLib
 {
 	template<typename Type, unsigned ALIGN_SIZE = 0>
 	class NVector

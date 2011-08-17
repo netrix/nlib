@@ -5,7 +5,7 @@
 	#include <stdlib.h>	// int posix_memalign(void **memptr, size_t alignment, size_t size);
 #endif
 
-namespace NIne
+namespace NLib
 {
 #ifdef _MSC_VER
 	typedef __int8				NInt8;
@@ -43,7 +43,7 @@ namespace NIne
 }
 
 #define NMAX_UINT32 0xffffffffu
-#define NMAX_SIZE_T (NIne::NSize_t)-1
+#define NMAX_SIZE_T (NLib::NSize_t)-1
 
 #define null 0
 #define NNEW new (std::nothrow)

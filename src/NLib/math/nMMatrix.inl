@@ -1,7 +1,8 @@
 #pragma once
 // Included in nMath.hpp
 
-namespace NIne
+namespace NLib {
+namespace Math
 {
 	/****************************************************/
 	// Declarations
@@ -49,7 +50,7 @@ namespace NIne
 	_NINLINE NMMatrix operator*(NMMatrixPP matA, NMMatrixPP matB);
 	_NINLINE NMMatrix operator/(NMMatrixPP matA, float f);
 	_NINLINE NMMatrix operator/(NMMatrixPP matA, NMMatrixPP matB);
-	
+
 	_NINLINE NMMatrix& operator+=(NMMatrix& matA, NMMatrixPP matB);
 	_NINLINE NMMatrix& operator-=(NMMatrix& matA, NMMatrixPP matB);
 	_NINLINE NMMatrix& operator*=(NMMatrix& matA, float f);
@@ -59,7 +60,6 @@ namespace NIne
 	_NINLINE NMMatrix NMMatrixTranspose(NMMatrixPP mat);
 	_NINLINE float NMMatrixDeterminant(NMMatrixPP mat);
 	_NINLINE NMMatrix NMMatrixInverse(NMMatrixPP mat, float* ofDeterminant);
-
 
 	/****************************************************/
 	// Definitions
@@ -181,7 +181,6 @@ namespace NIne
 		NMVectorStore(mat3x4.r[1], mat.r[1]);
 		NMVectorStore(mat3x4.r[2], mat.r[2]);
 	}
-
 
 	_NINLINE void NMMatrixStore(NMMatrix4x4f& mat4x4, NMMatrixPP mat)
 	{
@@ -410,7 +409,6 @@ namespace NIne
 		temp.r[2] = NMVectorMul(matA.r[2], matB.r[2]);
 		temp.r[3] = NMVectorMul(matA.r[3], matB.r[3]);
 		return temp;
-
 	}
 
 	_NINLINE NMMatrix NMMatrixDiv(NMMatrixPP matA, float f)
@@ -467,7 +465,7 @@ namespace NIne
 	{
 		return NMMatrixDivEach(matA, matB);
 	}
-	
+
 	_NINLINE NMMatrix& operator+=(NMMatrix& matA, NMMatrixPP matB)
 	{
 		matA.r[0] += matB.r[0];
@@ -615,7 +613,7 @@ namespace NIne
 		_MM_TRANSPOSE4_PS(temp.r[0], temp.r[1], temp.r[2], temp.r[3]);
 	#else
 		temp.m11 = mat.m11; temp.m12 = mat.m21;	temp.m13 = mat.m31;	temp.m14 = mat.m41;
-		temp.m21 = mat.m12;	temp.m22 = mat.m22; temp.m23 = mat.m32;	temp.m24 = mat.m42;	
+		temp.m21 = mat.m12;	temp.m22 = mat.m22; temp.m23 = mat.m32;	temp.m24 = mat.m42;
 		temp.m31 = mat.m13;	temp.m32 = mat.m23;	temp.m33 = mat.m33; temp.m34 = mat.m43;
 		temp.m41 = mat.m14; temp.m42 = mat.m24; temp.m43 = mat.m34; temp.m44 = mat.m44;
 	#endif
@@ -844,4 +842,5 @@ namespace NIne
 	#endif
 		return result;
 	}
+}
 }

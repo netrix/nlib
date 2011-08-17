@@ -1,9 +1,9 @@
-#include "../nAssert.hpp"
+#include "../NLib/nAssert.hpp"
 
 #ifdef _DEBUG
 	#include <stdio.h>
 
-	namespace NIne
+	namespace NLib
 	{
 		bool NAssertFunction(bool bResult, const char* szExpression, const char* szDescription, const char* szLine, const char* szFilename, const char* szFunction, bool* pbIgnoreAlways)
 		{
@@ -14,10 +14,10 @@
 			else
 			{
 				char message[2048];
-			
-				sprintf_s<sizeof(message)>(message, "%s %s %s %s %s %s %s %s %s %s %s %s", "This szExpressionbResultsion: \n\n\"", szExpression, 
-								"\"\n\nhas returned false.\n\nDescription:\n\n\"", szDescription, "\"\n\nFilename: ", 
-								szFilename, "\nLine: ", szLine, "\nFunction: ", szFunction, 
+
+				sprintf_s<sizeof(message)>(message, "%s %s %s %s %s %s %s %s %s %s %s %s", "This szExpressionbResultsion: \n\n\"", szExpression,
+								"\"\n\nhas returned false.\n\nDescription:\n\n\"", szDescription, "\"\n\nFilename: ",
+								szFilename, "\nLine: ", szLine, "\nFunction: ", szFunction,
 								"\n\nChoose Abort to stop application, Retry to ignore that message, Ignore to ",
 								" ignore all messages of this assert.");
 
@@ -25,7 +25,7 @@
 				{
 				case IDABORT:
 					{
-						sprintf_s<sizeof(message)>(message, "%s %s %s %s %s %s %s %s %s %s", szFilename, "(", szLine, ") : assert: \"", szExpression, 
+						sprintf_s<sizeof(message)>(message, "%s %s %s %s %s %s %s %s %s %s", szFilename, "(", szLine, ") : assert: \"", szExpression,
 									"\" has returned FALSE in szFunction: \"", szFunction, "\". Description: \"", szDescription, "\".\n");
 						OutputDebugStringA(message);
 					}

@@ -1,7 +1,7 @@
 #pragma once
 #include "nBase.hpp"
 
-namespace NIne
+namespace NLib
 {
 	enum NLibErrors
 	{
@@ -15,7 +15,7 @@ namespace NIne
 }
 
 // Check and pass result
-#define NRESULT_CP(res, func) { res = func; if(res != NIne::NRV_SUCCESS) { return res; } };
+#define NRESULT_CP(res, func) { res = func; if(res != NLib::NRV_SUCCESS) { return res; } };
 
-#define NFAILED(arg)  (arg) != NIne::NRV_SUCCESS
-#define NSUCCEED(arg) (arg) == NIne::NRV_SUCCESS
+#define NFAILED(arg)  (arg) != NLib::NRV_SUCCESS
+#define NSUCCEED(arg) (arg) == NLib::NRV_SUCCESS

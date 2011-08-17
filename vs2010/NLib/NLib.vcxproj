@@ -143,33 +143,33 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\NLib\nArray.hpp" />
+    <ClInclude Include="..\..\src\NLib\Math\nMath.hpp" />
+    <ClInclude Include="..\..\src\NLib\Memory\nArray.hpp" />
+    <ClInclude Include="..\..\src\NLib\Memory\nMemory.hpp" />
     <ClInclude Include="..\..\src\NLib\nAssert.hpp" />
     <ClInclude Include="..\..\src\NLib\nBase.hpp" />
     <ClInclude Include="..\..\src\NLib\nBitmap.hpp" />
     <ClInclude Include="..\..\src\NLib\nDataQueue.hpp" />
     <ClInclude Include="..\..\src\NLib\nErrors.hpp" />
     <ClInclude Include="..\..\src\NLib\nLogger.hpp" />
-    <ClInclude Include="..\..\src\NLib\nMath.hpp" />
-    <ClInclude Include="..\..\src\NLib\nMemory.hpp" />
     <ClInclude Include="..\..\src\NLib\nStableVector.hpp" />
     <ClInclude Include="..\..\src\NLib\nString.hpp" />
     <ClInclude Include="..\..\src\NLib\nVector.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\NLib\src\nAssert.cpp" />
-    <ClCompile Include="..\..\src\NLib\src\nLogger.cpp" />
-    <ClCompile Include="..\..\src\NLib\src\nMath.cpp" />
-    <ClCompile Include="..\..\src\NLib\src\nMemory.cpp" />
+    <ClCompile Include="..\..\src\src\nAssert.cpp" />
+    <ClCompile Include="..\..\src\src\nLogger.cpp" />
+    <ClCompile Include="..\..\src\src\nMath.cpp" />
+    <ClCompile Include="..\..\src\src\nMemory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\NLib\math\nMMatrix.inl" />
-    <None Include="..\..\src\NLib\math\nMTransforms.inl" />
-    <None Include="..\..\src\NLib\math\nMUtilities.inl" />
-    <None Include="..\..\src\NLib\math\nMVector.inl" />
-    <None Include="..\..\src\NLib\math\nMVector2f.inl" />
-    <None Include="..\..\src\NLib\math\nMVector3f.inl" />
-    <None Include="..\..\src\NLib\math\nMVector4f.inl" />
+    <None Include="..\..\src\NLib\Math\nMMatrix.inl" />
+    <None Include="..\..\src\NLib\Math\nMTransforms.inl" />
+    <None Include="..\..\src\NLib\Math\nMUtilities.inl" />
+    <None Include="..\..\src\NLib\Math\nMVector.inl" />
+    <None Include="..\..\src\NLib\Math\nMVector2f.inl" />
+    <None Include="..\..\src\NLib\Math\nMVector3f.inl" />
+    <None Include="..\..\src\NLib\Math\nMVector4f.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

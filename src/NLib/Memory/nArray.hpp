@@ -1,10 +1,11 @@
 #pragma once
 
-#include "nMemory.hpp"	// nBase.hpp, nErrors.hpp
-#include "nAssert.hpp"	// nBase.hpp
-#include <string.h>		// memcpy
+#include "nMemory.hpp"		// nBase.hpp, nErrors.hpp
+#include "../nAssert.hpp"	// nBase.hpp
+#include <string.h>			// memcpy
 
-namespace NIne
+namespace NLib {
+namespace Memory
 {
 	template<typename Type, unsigned ALIGN_SIZE = 0>
 	class NArray
@@ -78,7 +79,7 @@ namespace NIne
 		else					{ pData = (Type*)NMemoryAllocate(uSize * sizeof(Type), ALIGN_SIZE); }
 
 		memcpy(pData, m_pData, m_uSize * sizeof(Type));
-		delete [] m_pData;
+		NMemoryRelease(m_pData);
 
 		m_pData = pData;
 		m_uSize = uSize;
@@ -116,4 +117,5 @@ namespace NIne
 		srcA = srcB;
 		srcB = srcA;
 	}
+}
 }

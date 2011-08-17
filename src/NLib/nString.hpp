@@ -1,7 +1,7 @@
 #pragma once
 #include "nBase.hpp"
 
-namespace NIne
+namespace NLib
 {
 	_NINLINE char* NTrimToLocalPathA(char* szFullPath)
 	{
@@ -11,7 +11,6 @@ namespace NIne
 		if(atSlash > atBackslash)
 		{
 			szFullPath = atSlash;
-
 		}
 		else if(atBackslash != null)
 		{
@@ -26,11 +25,10 @@ namespace NIne
 	{
 		wchar_t* atSlash = wcsrchr(szFullPath, '/');
 		wchar_t* atBackslash = wcsrchr(szFullPath, '\\');
-		
+
 		if(atSlash > atBackslash)
 		{
 			szFullPath = atSlash;
-
 		}
 		else if(atBackslash != null)
 		{

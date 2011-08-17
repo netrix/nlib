@@ -2,7 +2,7 @@
 #pragma warning(disable: 4512)
 
 #include <tut/tut.hpp>
-#include "NLib/nArray.hpp"
+#include "NLib/Memory/nArray.hpp"
 
 #define OMIT_ASSERTS_TESTS
 
@@ -10,16 +10,17 @@ namespace tut
 {
 	struct ArrayTestData
 	{
-		NIne::NArray<NIne::NSize_t> array;
+		NLib::Memory::NArray<NLib::NSize_t> array;
 
 		ArrayTestData()
 		{
-			NIne::NMemoryInit(512);
+			//NLib::Memory::NMemoryInit(512);
+			NLib::Memory::NMemory::InitMemory(512);
 		}
 
 		~ArrayTestData()
 		{
-			NIne::NMemoryReleaseAll();
+			NLib::Memory::NMemory::ReleaseMemory();
 		}
 	};
 
@@ -100,7 +101,7 @@ namespace tut
 	{
 		array.create(20);
 
-		for(NIne::NSize_t i = 0; i < array.size(); ++i)
+		for(NLib::NSize_t i = 0; i < array.size(); ++i)
 		{
 			ensure_equals("Access operators tests", &array[i], array.data() + i);
 			array[i] = 2 * i + 1;
@@ -115,13 +116,13 @@ namespace tut
 	template<>
 	void tgArrayObject::test<9>()
 	{
-		NIne::NSize_t uChunks = NIne::NMemoryGetAllocatedChunksCount();
+		NLib::NSize_t uChunks = NLib::Memory::NMemory::GetAllocatedChunksCount();
 
 		array.create(20);
-		ensure("Acquire memory validation", NIne::NMemoryGetAllocatedChunksCount() > uChunks);
+		ensure("Acquire memory validation", NLib::Memory::NMemory::GetAllocatedChunksCount() > uChunks);
 
 		array.release();
-		ensure_equals("Release memory validations", NIne::NMemoryGetAllocatedChunksCount(), uChunks);
+		ensure_equals("Release memory validations", NLib::Memory::NMemory::GetAllocatedChunksCount(), uChunks);
 	}
 
 	/**************************************************/

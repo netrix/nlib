@@ -1,5 +1,5 @@
-#include "../nLogger.hpp"
-#include "../nAssert.hpp"
+#include "../NLib/nLogger.hpp"
+#include "../NLib/nAssert.hpp"
 #include <time.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -13,7 +13,7 @@ namespace
 	bool g_bPrint;
 }
 
-namespace NIne
+namespace NLib
 {
 	/***********************************************************************/
 	NLogger::NLogger()
@@ -32,7 +32,7 @@ namespace NIne
 		{
 			return NRV_SUCCESS;
 		}
-		
+
 		g_bPrint = bPrint;
 		g_pFile = fopen(szFilepath, "w");
 		if(g_pFile == null)
@@ -60,9 +60,9 @@ namespace NIne
 		{
 			time_t rawTime;		// Time-stamp
 			time(&rawTime);
-			
+
 			tm* pTs = localtime(&rawTime);
-			
+
 			char szBuffer[32];
 			strftime(szBuffer, sizeof(szBuffer), "[ %H:%M:%S %d-%m-%Y ] ", pTs);
 
@@ -78,7 +78,7 @@ namespace NIne
 			if(g_bPrint) { vprintf(szFormat, argptr); }
 
 			va_end(argptr);
-					
+
 			fprintf(g_pFile, "\n");
 			if(g_bPrint) { printf("\n"); }
 			fflush(g_pFile);
@@ -91,9 +91,9 @@ namespace NIne
 		{
 			time_t rawTime;		// Time-stamp
 			time(&rawTime);
-			
+
 			tm* pTs = localtime(&rawTime);
-			
+
 			wchar_t szBuffer[32];
 			wcsftime(szBuffer, sizeof(szBuffer), L"[ %H:%M:%S %d-%m-%Y ] ", pTs);
 
@@ -105,7 +105,7 @@ namespace NIne
 			vfwprintf(g_pFile, szFormat, argptr);	// Writing message
 
 			va_end(argptr);
-					
+
 			fwprintf(g_pFile, L"\n");
 			fflush(g_pFile);
 		}

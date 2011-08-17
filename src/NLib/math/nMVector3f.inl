@@ -1,7 +1,8 @@
 #pragma once
 // Included in nMath.hpp
 
-namespace NIne
+namespace NLib {
+namespace Math
 {
 	/****************************************************/
 	// Declarations
@@ -43,7 +44,7 @@ namespace NIne
 	_NINLINE NMVector3f operator*(const NMVector3f& vecA, const NMVector3f& vecB);
 	_NINLINE NMVector3f operator/(const NMVector3f& vecA, float f);
 	_NINLINE NMVector3f operator/(const NMVector3f& vecA, const NMVector3f& vecB);
-	
+
 	_NINLINE NMVector3f& operator+=(NMVector3f& vecA, const NMVector3f& vecB);
 	_NINLINE NMVector3f& operator-=(NMVector3f& vecA, const NMVector3f& vecB);
 	_NINLINE NMVector3f& operator*=(NMVector3f& vecA, float f);
@@ -336,7 +337,7 @@ namespace NIne
 	{
 		return NMVector3fLess(vecA, vecB);
 	}
-	
+
 	_NINLINE NMVector3f& operator+=(NMVector3f& vecA, const NMVector3f& vecB)
 	{
 		vecA.x += vecB.x;
@@ -422,4 +423,5 @@ namespace NIne
 	{
 		return vec - NMVector3fMul(normal, 2 * NMVector3fDot(vec, normal) / NMVector3fDot(normal, normal));
 	}
+}
 }

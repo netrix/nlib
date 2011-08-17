@@ -2,7 +2,7 @@
 
 #include "nDynamicTable.hpp"
 
-namespace NIne
+namespace NLib
 {
 	template<typename Type>
 	class NDataQueue
@@ -35,7 +35,7 @@ namespace NIne
 			m_uSize = src.m_uSize;
 			m_uActualFront = src.m_uActualFront;
 			m_uActualBack = src.m_uActualBack;
-			
+
 			return NRV_SUCCESS;
 		}
 

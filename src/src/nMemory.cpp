@@ -1,16 +1,17 @@
-#include "../nMemory.hpp"
-#include "../nLogger.hpp"
-#include "../nAssert.hpp"
+#include "../NLib/Memory/nMemory.hpp"
+#include "../NLib/nLogger.hpp"
+#include "../NLib/nAssert.hpp"
 
 namespace
 {
-	inline NIne::NSize_t ComplementTo8(NIne::NSize_t uValue)
+	inline NLib::NSize_t ComplementTo8(NLib::NSize_t uValue)
 	{
 		return (uValue & 0xFFFFFFF8u) == uValue ? uValue : (uValue & 0xFFFFFFF8u) + 8;
 	}
 }
 
-namespace NIne
+namespace NLib {
+namespace Memory
 {
 	NMemory NMemory::m_instance;
 
@@ -313,4 +314,5 @@ namespace NIne
 
 		m_uNumUsedChunks -= uSize;
 	}
+}
 }

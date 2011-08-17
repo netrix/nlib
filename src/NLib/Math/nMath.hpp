@@ -1,5 +1,5 @@
 #pragma once
-#include "nBase.hpp"
+#include "../nBase.hpp"
 #include <math.h>
 
 #ifdef _SSE_ENABLED
@@ -9,7 +9,8 @@
 
 #pragma warning(disable: 4201)	// Nonstandard extension for nameless structs
 
-namespace NIne
+namespace NLib {
+namespace Math
 {
 	/****************************************************/
 	// NMVector
@@ -162,14 +163,14 @@ namespace NIne
 		{
 			mov eax, pfSin;
 			mov edx, pfCos;
-       
+
 			fld     fAngle;
 			fsincos;
 			fstp    dword ptr [edx];
 			fstp    dword ptr [eax];
 		}
 	#else
-		__asm__ 
+		__asm__
 		(
 			"fld %2;"
 			"fsincos;"
@@ -215,7 +216,7 @@ namespace NIne
 	#define NMGlobalConst extern const __declspec(selectany)
 #else
 	#define NMGlobalConst extern const __attribute__((weak))
-#endif 
+#endif
 
 	NMGlobalConst __NVec4fv NMCVector4fIdentityRow0	= { 1.0f, 0.0f, 0.0f, 0.0f };
 	NMGlobalConst __NVec4fv NMCVector4fIdentityRow1	= { 0.0f, 1.0f, 0.0f, 0.0f };
@@ -266,9 +267,10 @@ namespace NIne
 	NMGlobalConst double NM_1BYPI = 0.31830988618379067153776752674503;
 	NMGlobalConst double NM_EPSILON = 0.000000000000000111;
 }
+}
 
-#define NM_IN_EPSILON_F(val) ((val) > -NIne::NM_EPSILON_F) && ((val) < NIne::NM_EPSILON_F)
-#define NM_IN_EPSILON(val) ((val) > -NIne::NM_EPSILON) && ((val) < NIne::NM_EPSILON)
+#define NM_IN_EPSILON_F(val) ((val) > -NLib::NM_EPSILON_F) && ((val) < NLib::NM_EPSILON_F)
+#define NM_IN_EPSILON(val) ((val) > -NLib::NM_EPSILON) && ((val) < NLib::NM_EPSILON)
 
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
@@ -278,10 +280,10 @@ namespace NIne
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
-#include "math/nMVector.inl"
-#include "math/nMVector2f.inl"
-#include "math/nMVector3f.inl"
-#include "math/nMVector4f.inl"
-#include "math/nMMatrix.inl"
-#include "math/nMTransforms.inl"
-#include "math/nMUtilities.inl"
+#include "nMVector.inl"
+#include "nMVector2f.inl"
+#include "nMVector3f.inl"
+#include "nMVector4f.inl"
+#include "nMMatrix.inl"
+#include "nMTransforms.inl"
+#include "nMUtilities.inl"

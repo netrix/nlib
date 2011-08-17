@@ -1,12 +1,12 @@
-#include "../nBitmap.hpp"
-#include "../nAssert.hpp"
-#include "../nLogger.hpp"
+#include "../NLib/nBitmap.hpp"
+#include "../NLib/nAssert.hpp"
+#include "../NLib/nLogger.hpp"
 #include <stdio.h>
 #include <string.h>
 
 #pragma warning(disable: 4996)	// fopen deprecated on windows
 
-namespace 
+namespace
 {
 	struct NRaiiFile
 	{
@@ -28,14 +28,14 @@ namespace
 
 namespace NIne
 {
-	NBitmap::NBitmap() 
+	NBitmap::NBitmap()
 		: m_uWidth(0)
 		, m_uHeight(0)
 		, m_uBitsPerPixel(0)
 	{
 	}
 	/********************************************************/
-	NBitmap::~NBitmap() 
+	NBitmap::~NBitmap()
 	{
 		release();
 	}
@@ -117,7 +117,7 @@ namespace NIne
 			}
 
 			fseek(pFile, uComplets, SEEK_CUR);
-			pTemp -= uRowDataSize;	
+			pTemp -= uRowDataSize;
 		}
 
 		m_uWidth = bmpInfoHeader.uWidth;

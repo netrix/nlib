@@ -4,7 +4,7 @@
 	#include "nBase.hpp"
 	#include <windows.h>
 
-	namespace NIne
+	namespace NLib
 	{
 		extern bool NAssertFunction(bool bResult, const char* szExpression, const char* szDescription, const char* szLine, const char* szFilename, const char* szFunction, bool* pbIgnoreAlways);
 	}
@@ -14,7 +14,7 @@
 		static bool bIgnoreAlways = false;\
 		if(!bIgnoreAlways) \
 		{\
-			if(NIne::NAssertFunction(szExpression, NMAKE_STRING_A(szExpression), szDescription, NMAKE_STRING_A(__LINE__), __FILE__, __FUNCTION__, &bIgnoreAlways))\
+			if(NLib::NAssertFunction(szExpression, NMAKE_STRING_A(szExpression), szDescription, NMAKE_STRING_A(__LINE__), __FILE__, __FUNCTION__, &bIgnoreAlways))\
 			{\
 				if(::IsDebuggerPresent())\
 				{\

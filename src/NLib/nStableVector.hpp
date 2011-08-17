@@ -2,7 +2,7 @@
 
 #include "nVector.hpp"
 
-namespace NIne
+namespace NLib
 {
 	template<typename Type>
 	class NStableVector

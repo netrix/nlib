@@ -1,7 +1,8 @@
 #pragma once
 // Included in nMath.hpp
 
-namespace NIne
+namespace NLib {
+namespace Math
 {
 	/****************************************************/
 	// Declarations
@@ -54,4 +55,5 @@ namespace NIne
 	#endif
 		return result;
 	}
+}
 }

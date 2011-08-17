@@ -2,7 +2,7 @@
 #include "nBase.hpp"
 #include "nDynamicTable.hpp"
 
-namespace NIne
+namespace NLib
 {
 	class NBitmap
 	{

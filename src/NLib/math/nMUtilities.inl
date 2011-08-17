@@ -1,7 +1,8 @@
 #pragma once
 // Included in nMath.hpp
 
-namespace NIne
+namespace NLib {
+namespace Math
 {
 	/****************************************************/
 	// Declarations
@@ -24,14 +25,14 @@ namespace NIne
 
 	/****************************************************/
 	// Definitions
-	_NINLINE float NMNoiseNormalized(NIne::NUint32 x) 
-	{ 
+	_NINLINE float NMNoiseNormalized(NLib::NUint32 x)
+	{
 		x = (x << 13) ^ x;
 		return ((x * (x * x * 15731 + 789221) + 1376312589) & 0x7FFFFFFF) / float(0x7FFFFFFF);
 	}
 
 	_NINLINE float NMNoiseNormalized(NUint32 x, NUint32 y)
-	{ 
+	{
 		x = (x << 13) ^ y;
 		y = (y << 6) ^ x;
 		return ((y * (x * (x + y) * 15731 + 789221) + 1376312589) & 0x7FFFFFFF) / float(0x7FFFFFFF);
@@ -47,19 +48,19 @@ namespace NIne
 		return float(x - a) / (b - a);
 	}
 
-	_NINLINE float NMHermiteCurve(float t) 
+	_NINLINE float NMHermiteCurve(float t)
 	{
 		return t * t * (3 - 2 * t);
 	}
 
-	_NINLINE float NMHermiteStep(float t, float a, float b) 
+	_NINLINE float NMHermiteStep(float t, float a, float b)
 	{
 		if(a == b || t < a) return 0;
 		if(t > b) return 1;
 		return NMHermiteCurve(NMParametrize(t, a, b));
 	}
 
-	_NINLINE float NMHermiteCurveDeriverative(float t) 
+	_NINLINE float NMHermiteCurveDeriverative(float t)
 	{
 		return 6 * t * (1 - t);
 	}
@@ -70,19 +71,19 @@ namespace NIne
 		return NMHermiteCurveDeriverative(NMParametrize(t, a, b));
 	}
 
-	_NINLINE float NMSmoothNoise(NUint32 x) 
+	_NINLINE float NMSmoothNoise(NUint32 x)
 	{
 		return NMNoiseNormalized(x) / 2 + NMNoiseNormalized(x - 1) / 4 + NMNoiseNormalized(x + 1) / 4;
 	}
 
-	_NINLINE float NMInterpolate(float t, float a, float b) 
+	_NINLINE float NMInterpolate(float t, float a, float b)
 	{
 		return a + (b - a) * t;
 	}
 
-	_NINLINE float NMInterpolatedNoise(float x) 
+	_NINLINE float NMInterpolatedNoise(float x)
 	{
-		NIne::NUint32 X = (NIne::NUint32)(x);
+		NLib::NUint32 X = (NLib::NUint32)(x);
 		return NMInterpolate(x - X, NMSmoothNoise(X), NMSmoothNoise(X + 1));
 	}
 
@@ -90,4 +91,5 @@ namespace NIne
 	{
 		return 1.0f/6.0f*(t*(t*(t*(-a+3*b-3*c+d)+(3*a-6*b+3*c))+3*(c-a))+(a+4*b+c));
 	}
+}
 }
