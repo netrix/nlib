@@ -8,6 +8,18 @@ namespace
 	{
 		return (uValue & 0xFFFFFFF8u) == uValue ? uValue : (uValue & 0xFFFFFFF8u) + 8;
 	}
+
+	// http://msinilo.pl/blog/?p=702
+	template<size_t V>
+	struct Log2
+	{
+		enum
+		{
+			Value = Log2<V / 2>::Value + 1
+		};
+		typedef char V_MustBePowerOfTwo[((V & (V - 1)) == 0 ? 1 : -1)];
+	};
+	template<> struct Log2<1> { enum { Value = 0 }; };
 }
 
 namespace NLib {
@@ -265,7 +277,7 @@ namespace Memory
 		m_uNumUsedChunks += *pSizePointer;
 
 		// Saving information about offset at the beginning of *pSizePointer
-		*pSizePointer |= ((NSize_t)pSizePointer - (NSize_t)pFirst) << (sizeof(NSize_t) * 8 - sizeof(MemoryChunk));
+		*pSizePointer |= ((NSize_t)pSizePointer - (NSize_t)pFirst) << (sizeof(NSize_t) * 8 - Log2<sizeof(MemoryChunk)>::Value);
 
 		return pSizePointer != null ? pSizePointer + 1 : null;
 	}
@@ -276,7 +288,7 @@ namespace Memory
 		NSize_t* pOffset = (NSize_t*)pMemory - 1;
 		NSize_t uSize = *pOffset;
 
-		pOffset = (NSize_t*)((NSize_t)pOffset - (uSize >> (sizeof(NSize_t) * 8 - sizeof(MemoryChunk))));
+		pOffset = (NSize_t*)((NSize_t)pOffset - (uSize >> (sizeof(NSize_t) * 8 - Log2<sizeof(MemoryChunk)>::Value)));
 		uSize &= (1 << (sizeof(NSize_t) * 8 - sizeof(MemoryChunk))) - 1;
 
 		// Fixing chunks
