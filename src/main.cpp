@@ -1,11 +1,13 @@
 #include "nTestGroupMemory.hpp"
 #include "nTestGroupArray.hpp"
+#include "nTestGroupVector.hpp"
 
 #include <tut_reporter.h>
 #include "NLib/nLogger.hpp"
 
 using namespace NLib;
 using namespace Memory;
+using namespace Containers;
 
 namespace tut
 {

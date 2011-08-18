@@ -17,6 +17,9 @@
     <Filter Include="source\NLib\Math">
       <UniqueIdentifier>{80fe6a2c-6dbb-43d5-9b7e-317866dff2ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\NLib\Containers">
+      <UniqueIdentifier>{658fa937-f30e-4e83-9c31-cceae2196080}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\NLib\nAssert.hpp">
@@ -26,9 +29,6 @@
       <Filter>source\NLib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\NLib\nBitmap.hpp">
-      <Filter>source\NLib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\NLib\nDataQueue.hpp">
       <Filter>source\NLib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\NLib\nErrors.hpp">
@@ -43,9 +43,6 @@
     <ClInclude Include="..\..\src\NLib\nVector.hpp">
       <Filter>source\NLib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\NLib\nStableVector.hpp">
-      <Filter>source\NLib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\NLib\Memory\nArray.hpp">
       <Filter>source\NLib\Memory</Filter>
     </ClInclude>
@@ -54,6 +51,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\NLib\Math\nMath.hpp">
       <Filter>source\NLib\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\Containers\nDataQueue.hpp">
+      <Filter>source\NLib\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\Containers\nStableVector.hpp">
+      <Filter>source\NLib\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\Containers\nVector.hpp">
+      <Filter>source\NLib\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

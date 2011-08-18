@@ -143,16 +143,17 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\NLib\Containers\nDataQueue.hpp" />
+    <ClInclude Include="..\..\src\NLib\Containers\nStableVector.hpp" />
+    <ClInclude Include="..\..\src\NLib\Containers\nVector.hpp" />
     <ClInclude Include="..\..\src\NLib\Math\nMath.hpp" />
     <ClInclude Include="..\..\src\NLib\Memory\nArray.hpp" />
     <ClInclude Include="..\..\src\NLib\Memory\nMemory.hpp" />
     <ClInclude Include="..\..\src\NLib\nAssert.hpp" />
     <ClInclude Include="..\..\src\NLib\nBase.hpp" />
     <ClInclude Include="..\..\src\NLib\nBitmap.hpp" />
-    <ClInclude Include="..\..\src\NLib\nDataQueue.hpp" />
     <ClInclude Include="..\..\src\NLib\nErrors.hpp" />
     <ClInclude Include="..\..\src\NLib\nLogger.hpp" />
-    <ClInclude Include="..\..\src\NLib\nStableVector.hpp" />
     <ClInclude Include="..\..\src\NLib\nString.hpp" />
     <ClInclude Include="..\..\src\NLib\nVector.hpp" />
   </ItemGroup>

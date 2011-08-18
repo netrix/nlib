@@ -24,6 +24,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\nTestGroupArray.hpp" />
     <ClInclude Include="..\..\src\nTestGroupMemory.hpp" />
+    <ClInclude Include="..\..\src\nTestGroupVector.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DF19855C-BD72-4044-9C8A-9874A7C4E278}</ProjectGuid>
