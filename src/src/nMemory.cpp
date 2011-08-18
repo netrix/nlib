@@ -199,6 +199,9 @@ namespace Memory
 			{
 				NSize_t uReservationSize = ComplementTo8(max(uRealSize, m_uNumChunks * sizeof(MemoryChunk)));
 				pFirst = allocateChunks(uReservationSize);
+
+				if(pFirst == null)	{ return null; }
+
 				pPrevious = appendChunks(pFirst, uReservationSize / sizeof(MemoryChunk) - uNumChunks);
 			}
 
@@ -245,6 +248,9 @@ namespace Memory
 		{
 			NSize_t uReservationSize = ComplementTo8(max(uAlignmentSize, m_uNumChunks * sizeof(MemoryChunk)));
 			pFirst = allocateChunks(uReservationSize);
+
+			if(pFirst == null)	{ return null; }
+
 			pPrevious = appendChunks(pFirst, uReservationSize / sizeof(MemoryChunk));
 		}
 

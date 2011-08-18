@@ -143,7 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\NLib\Containers\nDataQueue.hpp" />
+    <ClInclude Include="..\..\src\NLib\Containers\nQueue.hpp" />
     <ClInclude Include="..\..\src\NLib\Containers\nStableVector.hpp" />
     <ClInclude Include="..\..\src\NLib\Containers\nVector.hpp" />
     <ClInclude Include="..\..\src\NLib\Math\nMath.hpp" />
@@ -151,14 +151,14 @@
     <ClInclude Include="..\..\src\NLib\Memory\nMemory.hpp" />
     <ClInclude Include="..\..\src\NLib\nAssert.hpp" />
     <ClInclude Include="..\..\src\NLib\nBase.hpp" />
-    <ClInclude Include="..\..\src\NLib\nBitmap.hpp" />
     <ClInclude Include="..\..\src\NLib\nErrors.hpp" />
     <ClInclude Include="..\..\src\NLib\nLogger.hpp" />
-    <ClInclude Include="..\..\src\NLib\nString.hpp" />
-    <ClInclude Include="..\..\src\NLib\nVector.hpp" />
+    <ClInclude Include="..\..\src\NLib\Utilities\nBitmap.hpp" />
+    <ClInclude Include="..\..\src\NLib\Utilities\nString.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\src\nAssert.cpp" />
+    <ClCompile Include="..\..\src\src\nBitmap.cpp" />
     <ClCompile Include="..\..\src\src\nLogger.cpp" />
     <ClCompile Include="..\..\src\src\nMath.cpp" />
     <ClCompile Include="..\..\src\src\nMemory.cpp" />

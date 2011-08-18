@@ -1,4 +1,4 @@
-#include "../NLib/nBitmap.hpp"
+#include "../NLib/Utilities/nBitmap.hpp"
 #include "../NLib/nAssert.hpp"
 #include "../NLib/nLogger.hpp"
 #include <stdio.h>
@@ -23,10 +23,11 @@ namespace
 		FILE* pFile;
 	};
 
-	NIne::NUint32 g_masks[] = { 0x000000FF, 0x0000FFFF, 0x00FFFFFF };
+	NLib::NUint32 g_masks[] = { 0x000000FF, 0x0000FFFF, 0x00FFFFFF };
 }
 
-namespace NIne
+namespace NLib {
+namespace Utilities
 {
 	NBitmap::NBitmap()
 		: m_uWidth(0)
@@ -42,9 +43,9 @@ namespace NIne
 	/********************************************************/
 	void NBitmap::create(NUint32 uWidth, NUint32 uHeight, NUint32 uBitsPerPixel)
 	{
-		NAssert(m_aBitmap == false, "Release bitmap first");
+		NAssert(m_aBitmap == false, "release bitmap first");
 
-		m_aBitmap.Create(uWidth * uHeight * uBitsPerPixel);
+		m_aBitmap.create(uWidth * uHeight * uBitsPerPixel);
 		m_uHeight = uHeight;
 		m_uWidth = uWidth;
 		m_uBitsPerPixel = uBitsPerPixel;
@@ -52,7 +53,7 @@ namespace NIne
 	/********************************************************/
 	void NBitmap::release()
 	{
-		m_aBitmap.Release();
+		m_aBitmap.release();
 		m_uHeight = 0;
 		m_uWidth = 0;
 		m_uBitsPerPixel = 0;
@@ -60,7 +61,7 @@ namespace NIne
 	/********************************************************/
 	bool NBitmap::loadFromFile(const char* szFile)
 	{
-		NAssert(m_aBitmap == false, "Release bitmap first");
+		NAssert(m_aBitmap == false, "release bitmap first");
 
 		NRaiiFile file(szFile, "rb");
 		FILE* pFile = file.pFile;
@@ -103,15 +104,15 @@ namespace NIne
 		// Loading data
 		NUint32 uRowDataSize = bmpInfoHeader.uWidth * m_uBitsPerPixel / 8;
 		NUint32 uComplets = (uRowDataSize & 0x3) != 0 ? (((uRowDataSize >> 2) + 1) << 2) - uRowDataSize : 0;	// Completion to get support 4 bytes ending lines
-		m_aBitmap.Create(uRowDataSize * bmpInfoHeader.uHeight);
+		m_aBitmap.create(uRowDataSize * bmpInfoHeader.uHeight);
 		fseek(pFile, bmpHeader.uPixelArrayOffset, SEEK_SET);
 
-		NUint8* pTemp = m_aBitmap.GetBuffer() + (bmpInfoHeader.uHeight - 1) * uRowDataSize;
+		NUint8* pTemp = m_aBitmap.data() + (bmpInfoHeader.uHeight - 1) * uRowDataSize;
 		for(NInt32 iRow = 0; iRow < bmpInfoHeader.uHeight; ++iRow)
 		{
 			if(!fread(pTemp, uRowDataSize, 1, pFile))
 			{
-				m_aBitmap.Release();
+				m_aBitmap.release();
 				NLogError("Failed to read from file");
 				return true;
 			}
@@ -129,7 +130,7 @@ namespace NIne
 	/********************************************************/
 	bool NBitmap::saveToFile(const char* szFile) const
 	{
-		NAssert(m_aBitmap == true, "Create bitmap first");
+		NAssert(m_aBitmap == true, "create bitmap first");
 
 		NRaiiFile file(szFile, "wb");
 		FILE* pFile = file.pFile;
@@ -183,7 +184,7 @@ namespace NIne
 		}
 
 		// Loading data
-		const NUint8* pTemp = m_aBitmap.GetBuffer() + (m_uHeight - 1) * uRowDataSize;
+		const NUint8* pTemp = m_aBitmap.data() + (m_uHeight - 1) * uRowDataSize;
 		for(NUint32 iRow = 0; iRow < m_uHeight; ++iRow)
 		{
 			if(!fwrite(pTemp, uRowDataSize, 1, pFile))
@@ -208,12 +209,13 @@ namespace NIne
 		NAssert(y < m_uHeight, "");
 
 		NSize_t uOffset = (y * m_uWidth + x) * 3;
-		memcpy(m_aBitmap.GetBuffer() + uOffset, &color, m_uBitsPerPixel / 8);
+		memcpy(m_aBitmap.data() + uOffset, &color, m_uBitsPerPixel / 8);
 	}
 	/********************************************************/
 	NUint32 NBitmap::getPixel(NUint32 x, NUint32 y) const
 	{
 		NSize_t uOffset = (y * m_uWidth + x) * 3;
-		return *((NUint32*)(m_aBitmap.GetBuffer() + uOffset)) & g_masks[m_uBitsPerPixel / 8 - 1];
+		return *((NUint32*)(m_aBitmap.data() + uOffset)) & g_masks[m_uBitsPerPixel / 8 - 1];
 	}
+}
 }

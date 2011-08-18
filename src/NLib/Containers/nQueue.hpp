@@ -35,6 +35,9 @@ namespace Containers
 
 		operator bool() const			{ return m_data; }
 
+	public:
+		static Memory::NMemory&		getMemory()		{ return memory; }
+
 	private:
 		NArray<Type, memory> m_data;
 		NSize_t m_uSize;

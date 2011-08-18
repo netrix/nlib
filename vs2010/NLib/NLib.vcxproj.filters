@@ -20,6 +20,9 @@
     <Filter Include="source\NLib\Containers">
       <UniqueIdentifier>{658fa937-f30e-4e83-9c31-cceae2196080}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\NLib\Utilities">
+      <UniqueIdentifier>{93fcfceb-032f-4412-9fdd-cbc9e47e4cb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\NLib\nAssert.hpp">
@@ -28,19 +31,10 @@
     <ClInclude Include="..\..\src\NLib\nBase.hpp">
       <Filter>source\NLib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\NLib\nBitmap.hpp">
-      <Filter>source\NLib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\NLib\nErrors.hpp">
       <Filter>source\NLib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\NLib\nLogger.hpp">
-      <Filter>source\NLib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\NLib\nString.hpp">
-      <Filter>source\NLib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\NLib\nVector.hpp">
       <Filter>source\NLib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\NLib\Memory\nArray.hpp">
@@ -52,14 +46,20 @@
     <ClInclude Include="..\..\src\NLib\Math\nMath.hpp">
       <Filter>source\NLib\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\NLib\Containers\nDataQueue.hpp">
-      <Filter>source\NLib\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\NLib\Containers\nStableVector.hpp">
       <Filter>source\NLib\Containers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\NLib\Containers\nVector.hpp">
       <Filter>source\NLib\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\Containers\nQueue.hpp">
+      <Filter>source\NLib\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\Utilities\nBitmap.hpp">
+      <Filter>source\NLib\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\Utilities\nString.hpp">
+      <Filter>source\NLib\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +73,9 @@
       <Filter>source\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\src\nMemory.cpp">
+      <Filter>source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\nBitmap.cpp">
       <Filter>source\src</Filter>
     </ClCompile>
   </ItemGroup>

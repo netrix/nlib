@@ -1,8 +1,8 @@
 #pragma once
-#include "nBase.hpp"
-#include "nDynamicTable.hpp"
+#include "../Memory/nArray.hpp"
 
-namespace NLib
+namespace NLib {
+namespace Utilities
 {
 	class NBitmap
 	{
@@ -37,27 +37,28 @@ namespace NLib
 		NBitmap();
 		~NBitmap();
 
-		void create(NUint32 uWidth, NUint32 uHeight, NUint32 uBitsPerPixel);
-		void release();
+		void	create(NUint32 uWidth, NUint32 uHeight, NUint32 uBitsPerPixel);
+		void	release();
 
-		bool loadFromFile(const char* szFile);
-		bool saveToFile(const char* szFile) const;
+		bool	loadFromFile(const char* szFile);
+		bool	saveToFile(const char* szFile) const;
 
 		NUint32 getWidth() const		{ return m_uWidth; }
 		NUint32 getHeight() const		{ return m_uHeight; }
 		NUint32 getBitsPerPixel() const { return m_uBitsPerPixel; }
 
-		NUint8* getBuffer() { return m_aBitmap.GetBuffer(); }
+		NUint8* getBuffer()				{ return m_aBitmap.data(); }
 
-		void setPixel(NUint32 x, NUint32 y, NUint32 color);
+		void	setPixel(NUint32 x, NUint32 y, NUint32 color);
 		NUint32 getPixel(NUint32 x, NUint32 y) const;
 
 	private:
-		NDynamicTable<NUint8> m_aBitmap; // uBitsPerPixel * m_uWidth * m_uHeight
+		Memory::NArray<NUint8> m_aBitmap; // uBitsPerPixel * m_uWidth * m_uHeight
 		NUint32 m_uWidth;
 		NUint32 m_uHeight;
 		NUint32 m_uBitsPerPixel;
 	};
+}
 }
 
 #define NBITMAP_RGB(r, g, b) ((b | (g << 8) | (r << 16)) & 0x00FFFFFF)

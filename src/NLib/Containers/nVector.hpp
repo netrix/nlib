@@ -57,6 +57,7 @@ namespace Containers
 
 	private:
 		Memory::NArray<Type, ALIGN_SIZE, memory> m_array;
+
 		NSize_t m_uSize;
 		NSize_t m_uReallocSize;
 	};

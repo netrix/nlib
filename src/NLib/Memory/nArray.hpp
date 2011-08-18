@@ -38,6 +38,9 @@ namespace Memory
 		NSize_t m_uSize;
 	};
 
+#pragma warning(push)
+#pragma warning(disable: 4127)
+
 	template<typename Type, unsigned ALIGN_SIZE, NMemory& memory>
 	void NArray<Type, ALIGN_SIZE, memory>::create(NSize_t uSize)
 	{
@@ -111,5 +114,7 @@ namespace Memory
 
 		return m_pData[uIndex];
 	}
+
+#pragma warning(pop)
 }
 }
