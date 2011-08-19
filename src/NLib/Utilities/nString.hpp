@@ -1,7 +1,8 @@
 #pragma once
-#include "nBase.hpp"
+#include "../nBase.hpp"
 
-namespace NLib
+namespace NLib {
+namespace Utilities
 {
 	_NINLINE char* NTrimToLocalPathA(char* szFullPath)
 	{
@@ -44,4 +45,5 @@ namespace NLib
 #else
 	#define NTrimToLocalPath NTrimToLocalPathA
 #endif
+}
 }

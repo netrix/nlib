@@ -1,6 +1,7 @@
 #include "nTestGroupMemory.hpp"
 #include "nTestGroupArray.hpp"
 #include "nTestGroupVector.hpp"
+#include "nTestGroupQueue.hpp"
 
 #include <tut_reporter.h>
 #include "NLib/nLogger.hpp"
@@ -25,9 +26,6 @@ int main()
 
 	//tut::test_result result;
 	//tut::runner.get().run_test("Array tests", 7, result);
-
-	NMemoryInit();
-	NSize_t* pSize = new (NMemoryGlobal) NSize_t;
 
 	return !reporter.all_ok();
 }

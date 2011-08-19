@@ -4,14 +4,14 @@
 namespace NLib {
 namespace Containers
 {
-	template<typename Type, Memory::NMemory& memory = Memory::NMemoryGlobal>
+	template<typename Type, unsigned ALIGN_SIZE = 0, Memory::NMemory& memory = Memory::NMemoryGlobal>
 	class NQueue
 	{
 	public:
 		NQueue()	: m_uReallocSize(0), m_uSize(0), m_uActualBack(0), m_uActualFront(0)	{ }
 
 		void		create(NSize_t uSize, NSize_t uReallocSize = 10);
-		void		create(const NQueue<Type>& src);
+		void		create(const NQueue& src);
 
 		void		setReallocSize(NSize_t uReallocSize);
 
@@ -39,7 +39,7 @@ namespace Containers
 		static Memory::NMemory&		getMemory()		{ return memory; }
 
 	private:
-		NArray<Type, memory> m_data;
+		Memory::NArray<Type, ALIGN_SIZE, memory> m_data;
 		NSize_t m_uSize;
 		NSize_t m_uReallocSize;
 
@@ -47,15 +47,15 @@ namespace Containers
 		NSize_t m_uActualBack;  // Actual back - can be m_uActualFront + m_uSize, but then need to be checked
 	};
 
-	template<typename Type, Memory::NMemory& memory>
-	void NQueue<Type, memory>::create(NSize_t uSize, NSize_t uReallocSize)
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NQueue<Type, ALIGN_SIZE, memory>::create(NSize_t uSize, NSize_t uReallocSize)
 	{
 		m_data.create(uSize);
 		m_uReallocSize = uReallocSize;
 	}
 
-	template<typename Type, Memory::NMemory& memory>
-	void NQueue<Type, memory>::create(const NQueue<Type, memory>& src)
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NQueue<Type, ALIGN_SIZE, memory>::create(const NQueue<Type, ALIGN_SIZE, memory>& src)
 	{
 		m_data.create(src.m_data);
 
@@ -65,31 +65,31 @@ namespace Containers
 		m_uActualBack = src.m_uActualBack;
 	}
 
-	template<typename Type, Memory::NMemory& memory>
-	void NQueue<Type, memory>::setReallocSize(NSize_t uReallocSize)
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NQueue<Type, ALIGN_SIZE, memory>::setReallocSize(NSize_t uReallocSize)
 	{
 		NAssert(uReallocSize > 0, "uReallocSize must be > 0");
 
 		m_uReallocSize = uReallocSize;
 	}
 
-	template<typename Type, Memory::NMemory& memory>
-	void NQueue<Type, memory>::clear()
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NQueue<Type, ALIGN_SIZE, memory>::clear()
 	{
 		m_uSize = 0;
 		m_uActualFront = 0;
 		m_uActualBack = 0;
 	}
 
-	template<typename Type, Memory::NMemory& memory>
-	void NQueue<Type, memory>::release()
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NQueue<Type, ALIGN_SIZE, memory>::release()
 	{
 		m_data.release();
 		Clear();
 	}
 
-	template<typename Type, Memory::NMemory& memory>
-	void NQueue<Type, memory>::push_back(const Type& element)
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NQueue<Type, ALIGN_SIZE, memory>::push_back(const Type& element)
 	{
 		if(m_uSize + 1 > m_data.size())	// Full
 		{
@@ -111,15 +111,15 @@ namespace Containers
 		m_data[m_uActualBack] = element;
 	}
 
-	template<typename Type, Memory::NMemory& memory>
-	void NQueue<Type, memory>::pop_front()
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NQueue<Type, ALIGN_SIZE, memory>::pop_front()
 	{
 		if(++m_uActualFront == m_data.size())	{ m_uActualFront = 0; }
 		m_uSize = m_uSize > 0 ? m_uSize - 1 : 0;
 	}
 
-	template<typename Type, Memory::NMemory& memory>
-	void NQueue<Type, memory>::reserve(NSize_t uSize)
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NQueue<Type, ALIGN_SIZE, memory>::reserve(NSize_t uSize)
 	{
 		if(uSize > m_data.size())	// Full
 		{
