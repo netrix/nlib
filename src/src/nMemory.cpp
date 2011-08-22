@@ -290,6 +290,9 @@ namespace Memory
 	/***********************************************************************/
 	void NMemory::release(void* pMemory)
 	{
+		// typical delete behavior
+		if(pMemory == null)	{ return; }
+
 		// Getting size value
 		NSize_t* pOffset = (NSize_t*)pMemory - 1;
 		NSize_t uSize = *pOffset;

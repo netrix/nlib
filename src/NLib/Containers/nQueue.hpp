@@ -1,5 +1,6 @@
 #pragma once
-#include "../Memory/nArray.hpp"
+#include "nContainerGuard.hpp"
+#include "nArray.hpp"
 
 namespace NLib {
 namespace Containers
@@ -29,8 +30,10 @@ namespace Containers
 
 		NSize_t		capacity() const	{ return m_data.size();	}
 		bool		empty() const		{ return m_uSize == 0; }
+		bool		full() const		{ return m_uSize < m_data.size(); }
 		NSize_t		size() const		{ return m_uSize; }
 
+		void		reserve();
 		void		reserve(NSize_t uSize);
 
 		operator bool() const			{ return m_data; }
@@ -50,14 +53,14 @@ namespace Containers
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NQueue<Type, ALIGN_SIZE, memory>::create(NSize_t uSize, NSize_t uReallocSize)
 	{
-		m_data.create(uSize);
+		m_data.create(uSize);			NCM_V(memory);
 		m_uReallocSize = uReallocSize;
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NQueue<Type, ALIGN_SIZE, memory>::create(const NQueue<Type, ALIGN_SIZE, memory>& src)
 	{
-		m_data.create(src.m_data);
+		m_data.create(src.m_data);		NCM_V(memory);
 
 		m_uReallocSize = src.m_uReallocSize;
 		m_uSize = src.m_uSize;
@@ -85,7 +88,7 @@ namespace Containers
 	void NQueue<Type, ALIGN_SIZE, memory>::release()
 	{
 		m_data.release();
-		Clear();
+		clear();
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
@@ -96,14 +99,14 @@ namespace Containers
 			if(m_uActualBack != (m_data.size() - 1))	// In the middle
 			{
 				Memory::NArray<Type, memory> temp;
-				temp.create(m_data.size() + m_uReallocSize);
+				temp.create(m_data.size() + m_uReallocSize);	NCM_V(memory);
 				memcpy(temp.data(), m_data.data() + m_uActualFront, m_data.size() - m_uActualFront);	// Copy front part
 				memcpy(temp.data() + m_data.size() - m_uActualFront, m_data.data(), m_uActualFront);	// Copy back part
 				m_uActualFront = 0;
 				m_data.release();
 				m_data = temp;
 			}
-			else	{ m_data.resize(m_data.size() + m_uReallocSize); }
+			else	{ m_data.resize(m_data.size() + m_uReallocSize); NCM_V(memory);}
 		}
 
 		++m_uSize;
@@ -119,14 +122,31 @@ namespace Containers
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NQueue<Type, ALIGN_SIZE, memory>::reserve()
+	{
+		if(m_uActualBack < m_uActualFront)	// In the middle
+		{
+			NArray<Type> temp;
+			temp.create(uSize);	NCM_V(memory);
+			memcpy(temp.data(), m_data.data() + m_uActualFront, m_data.size() - m_uActualFront);	// Copy front part
+			memcpy(temp.data() + m_data.size() - m_uActualFront, m_data.data(), m_uActualFront);	// Copy back part
+			m_uActualFront = 0;
+			m_uActualBack = m_uSize - 1;
+			m_data.release();
+			m_data = temp;
+		}
+		else	{ m_data.resize(m_data.size() + m_uReallocSize); }
+	}
+
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NQueue<Type, ALIGN_SIZE, memory>::reserve(NSize_t uSize)
 	{
 		if(uSize > m_data.size())	// Full
 		{
 			if(m_uActualBack < m_uActualFront)	// In the middle
 			{
-				NDynamicTable<Type> temp;
-				temp.Create(m_data.size() + m_uReallocSize);
+				NArray<Type> temp;
+				temp.create(uSize);	NCM_V(memory);
 				memcpy(temp.data(), m_data.data() + m_uActualFront, m_data.size() - m_uActualFront);	// Copy front part
 				memcpy(temp.data() + m_data.size() - m_uActualFront, m_data.data(), m_uActualFront);	// Copy back part
 				m_uActualFront = 0;
@@ -134,7 +154,7 @@ namespace Containers
 				m_data.release();
 				m_data = temp;
 			}
-			else	{ m_data.Resize(m_data.size() + m_uReallocSize); }
+			else	{ m_data.resize(m_data.size() + m_uReallocSize); }
 		}
 	}
 }

@@ -37,9 +37,6 @@
     <ClInclude Include="..\..\src\NLib\nLogger.hpp">
       <Filter>source\NLib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\NLib\Memory\nArray.hpp">
-      <Filter>source\NLib\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\NLib\Memory\nMemory.hpp">
       <Filter>source\NLib\Memory</Filter>
     </ClInclude>
@@ -60,6 +57,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\NLib\Utilities\nString.hpp">
       <Filter>source\NLib\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\Memory\nMemoryGuard.hpp">
+      <Filter>source\NLib\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\Containers\nContainerGuard.hpp">
+      <Filter>source\NLib\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLib\Containers\nArray.hpp">
+      <Filter>source\NLib\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 #pragma once
+#include "nMemoryGuard.hpp"
 #include "../nBase.hpp"
 #include "../nErrors.hpp"
 
@@ -47,7 +48,7 @@ namespace Memory
 		ChunkHead*		m_pHeads;
 		MemoryChunk*	m_pFreeChunks;
 
-		bool m_bOutOfMemory;
+		bool	m_bOutOfMemory;
 
 	public:
 		static NMemory m_instance;
@@ -112,18 +113,5 @@ inline void operator delete[](void* pMemory, NLib::Memory::NMemory& memory)
 
 #define NMemoryInit				NMemory::InitMemory
 #define NMemoryAllocate			NMemory::Allocate
-#define NMemoryRelease			NMemory::Release
+#define NMemoryRelease			NMemory::release
 #define NMemoryGlobal			NMemory::m_instance
-
-// Check memory
-#ifdef NCHECK_MEMORY_FLAG
-	#define NCM_RV_GLOBAL				if(NMemoryGlobal::OutOfMemory())	return NLib::NRV_OUT_OF_MEMORY;
-	#define NCM_RV(memory)				if((memory).outOfMemory())			return NLib::NRV_OUT_OF_MEMORY;
-	#define NCM_V_GLOBAL				if(NMemoryGlobal::OutOfMemory())	return;
-	#define NCM_V(memory)				if((memory).outOfMemory())			return;
-#else
-	#define NCM_RV_GLOBAL
-	#define NCM_RV(memory)
-	#define NCM_V_GLOBAL
-	#define NCM_V(memory)
-#endif

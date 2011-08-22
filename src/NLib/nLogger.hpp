@@ -12,25 +12,25 @@ namespace NLib
 		NLogger();
 		~NLogger();
 
-		static NRESULT InitLogger(const char* szFilepath, bool bPrint = false);
+		static NRESULT initLogger(const char* szFilepath, bool bPrint = false);
 
-		static void LogMessage(const char* szFormat, ...);
-		static void LogMessage(const wchar_t* szFormat, ...);
-		static void LogError(const char* szErrorMessage);
-		static void LogFunctionError(const char* szFunctionName, NRESULT errorCode);
+		static void logMessage(const char* szFormat, ...);
+		static void logMessage(const wchar_t* szFormat, ...);
+		static void logError(const char* szErrorMessage);
+		static void logFunctionError(const char* szFunctionName, NRESULT errorCode);
 
-		static void Release();
+		static void release();
 	};
 }
 
 #ifdef NLogger_ON
-	#define NLogInit NLib::NLogger::InitLogger
-	#define NLogHead() NLib::NLogger::LogMessage("[%s | %s | LINE: %d] >> ", __FILE__, __FUNCTION__, __LINE__)
-	#define NLogMessage NLib::NLogger::LogMessage
+	#define NLogInit NLib::NLogger::initLogger
+	#define NLogHead() NLib::NLogger::logMessage("[%s | %s | LINE: %d] >> ", __FILE__, __FUNCTION__, __LINE__)
+	#define NLogMessage NLib::NLogger::logMessage
 	#define NLogErrorFormat NLogHead(); NLogMessage
-	#define NLogError(szErrorMessage) NLib::NLogger::LogMessage("[%s | %s | LINE: %d] >> %s\n", __FILE__, __FUNCTION__, __LINE__, szErrorMessage)
-	#define NLogFunctionError(szFunctionName, errorCode) NLib::NLogger::LogMessage("[%s | %s | LINE: %d] >> Function \"%s\" returned an error. Error Code: %d.\n", __FILE__, __FUNCTION__, __LINE__, szFunctionName, errorCode)
-	#define NLogRelease NLib::NLogger::Release
+	#define NLogError(szErrorMessage) NLib::NLogger::logMessage("[%s | %s | LINE: %d] >> %s\n", __FILE__, __FUNCTION__, __LINE__, szErrorMessage)
+	#define NLogFunctionError(szFunctionName, errorCode) NLib::NLogger::logMessage("[%s | %s | LINE: %d] >> Function \"%s\" returned an error. Error Code: %d.\n", __FILE__, __FUNCTION__, __LINE__, szFunctionName, errorCode)
+	#define NLogRelease NLib::NLogger::release
 #else
 	inline void NInlineEmpty(...) { }
 	#define NLogInit(a) true

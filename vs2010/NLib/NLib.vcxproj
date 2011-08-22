@@ -143,12 +143,14 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\NLib\Containers\nArray.hpp" />
+    <ClInclude Include="..\..\src\NLib\Containers\nContainerGuard.hpp" />
     <ClInclude Include="..\..\src\NLib\Containers\nQueue.hpp" />
     <ClInclude Include="..\..\src\NLib\Containers\nStableVector.hpp" />
     <ClInclude Include="..\..\src\NLib\Containers\nVector.hpp" />
     <ClInclude Include="..\..\src\NLib\Math\nMath.hpp" />
-    <ClInclude Include="..\..\src\NLib\Memory\nArray.hpp" />
     <ClInclude Include="..\..\src\NLib\Memory\nMemory.hpp" />
+    <ClInclude Include="..\..\src\NLib\Memory\nMemoryGuard.hpp" />
     <ClInclude Include="..\..\src\NLib\nAssert.hpp" />
     <ClInclude Include="..\..\src\NLib\nBase.hpp" />
     <ClInclude Include="..\..\src\NLib\nErrors.hpp" />

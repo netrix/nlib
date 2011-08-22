@@ -1,5 +1,5 @@
 #pragma once
-#include "../Memory/nArray.hpp"
+#include "../Containers/nArray.hpp"
 
 namespace NLib {
 namespace Utilities
@@ -53,7 +53,7 @@ namespace Utilities
 		NUint32 getPixel(NUint32 x, NUint32 y) const;
 
 	private:
-		Memory::NArray<NUint8> m_aBitmap; // uBitsPerPixel * m_uWidth * m_uHeight
+		Containers::NArray<NUint8> m_aBitmap; // uBitsPerPixel * m_uWidth * m_uHeight
 		NUint32 m_uWidth;
 		NUint32 m_uHeight;
 		NUint32 m_uBitsPerPixel;

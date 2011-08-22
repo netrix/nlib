@@ -1,4 +1,5 @@
 #pragma once
+#include "nContainerGuard.hpp"
 #include "nVector.hpp"
 
 namespace NLib {
@@ -8,21 +9,25 @@ namespace Containers
 	class NStableVector
 	{
 	public:
+		NStableVector()	: m_uSize(0), m_uFreeSize(0), m_uReallocSize(0) { }
+
 		void		create(NSize_t uSize, NSize_t uReallocSize = 4);
-		void		create(const NStableVector<Type>& src);
+		void		create(const NStableVector& src);
 
 		void		setReallocSize(NSize_t uReallocSize);
+		void		reserve();
 		void		reserve(NSize_t uSize);
 
 		void		clear();
 		void		release();
 
-		void		insert(const Type& element, NSize_t& uNewIndex);
+		void		insert(const Type& element, NSize_t* ouNewIndex);
 		void		remove(NSize_t uIndex);
 
-		NSize_t		size() const						{ return m_data.GetSize() - m_freeIndices.GetSize(); }
-		NSize_t		capacity() const					{ return m_data.capacity();	}
-		bool		empty() const						{ return m_data.empty(); }
+		NSize_t		size() const						{ return m_uSize; }
+		NSize_t		capacity() const					{ return m_data.size();	}
+		bool		empty() const						{ return m_uSize == 0; }
+		bool		full() const						{ return m_uSize == m_data.size(); }
 
 		const Type* data() const						{ return m_data.data();	}
 		Type*		data()								{ return m_data.data();	}
@@ -32,63 +37,78 @@ namespace Containers
 
 		operator bool() const							{ return m_data && m_freeIndices; }
 
+	public:
+		static Memory::NMemory&		getMemory()		{ return memory; }
+
 	private:
-		NVector<Type>	 m_data;
-		NVector<NSize_t> m_freeIndices;
+		NArray<Type>		m_data;
+		NArray<NSize_t>		m_freeIndices;
+		NSize_t		m_uSize;
+		NSize_t		m_uFreeSize;
+		NSize_t		m_uReallocSize;
 	};
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NStableVector<Type, ALIGN_SIZE, memory>::create(NSize_t uSize, NSize_t uReallocSize)
 	{
-		m_data.create(uSize, uReallocSize);
-		m_freeIndices.create(uSize, uReallocSize);
+		m_data.create(uSize);			NCM_V(memory);  NC_GUARD(NArray<Type>, m_data);
+		m_freeIndices.create(uSize);	NCM_V(memory);  NC_GUARD_CLEAR(m_data);
+		m_uReallocSize = uReallocSize;
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NStableVector<Type, ALIGN_SIZE, memory>::create(const NStableVector<Type, ALIGN_SIZE, memory>& src)
 	{
-		m_data.create(uSize, uReallocSize);
-		m_freeIndices.create(uSize, uReallocSize);
+		m_data.create(src.m_data);					NCM_V(memory);  NC_GUARD(NVector<Type>, m_data);
+		m_freeIndices.create(src.m_freeIndices);	NCM_V(memory);  NC_GUARD_CLEAR(m_data);
+		m_uFreeSize = src.m_uFreeSize;
+		m_uSize = src.m_uSize;
+		m_uReallocSize = src.m_uReallocSize;
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NStableVector<Type, ALIGN_SIZE, memory>::setReallocSize(NSize_t uReallocSize)
 	{
-		m_data.setReallocSize(uReallocSize);
-		m_freeIndices.setReallocSize(uReallocSize);
+		NAssert(uReallocSize > 0, "uReallocSize must be > 0");
+		m_uReallocSize = uReallocSize;
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NStableVector<Type, ALIGN_SIZE, memory>::clear()
 	{
-		m_data.clear();
-		m_freeIndices.clear();
+		m_uSize = 0;
+		m_uFreeSize = 0;
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NStableVector<Type, ALIGN_SIZE, memory>::release()
 	{
 		m_data.release();
-		m_freeIndices.rselease();
+		m_freeIndices.release();
+		m_uSize = 0;
+		m_uFreeSize = 0;
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
-	void NStableVector<Type, ALIGN_SIZE, memory>::insert(const Type& element, NSize_t& uNewIndex)
+	void NStableVector<Type, ALIGN_SIZE, memory>::insert(const Type& element, NSize_t* ouNewIndex)
 	{
-		if(m_freeIndices.empty())
+		NAssert(ouNewIndex != null, "Invalid output pointer");
+
+		if(m_uFreeSize == 0)
 		{
-			NSize_t uLastCapacity = m_data.capacity();
-			m_data.push_back(element);
+			if(m_uSize == m_data.size())
+			{
+				m_freeIndices.resize(m_uSize + m_uReallocSize); NCM_V(memory);
+				m_data.resize(m_uSize + m_uReallocSize);		NCM_V(memory);	// Order is important, because if 1st succeed and 2nd fails, container is still usable.
+			}
 
-			if(uLastCapacity < m_data.capacity())	{ m_freeIndices.reserve(m_data.capacity()); }
-
-			uNewIndex = m_data.size() - 1;
+			m_data[m_uSize] = element;
+			*ouNewIndex = m_uSize++;
 		}
 		else
 		{
-			uNewIndex = m_freeIndices[m_freeIndices.size() - 1];
-			m_data[uNewIndex] = element;
-			m_freeIndices.pop_back();
+			*ouNewIndex = m_freeIndices[--m_uFreeSize];
+			m_data[*ouNewIndex] = element;
 		}
 	}
 
@@ -97,14 +117,21 @@ namespace Containers
 	{
 		NAssert(uIndex < m_data.size(), "uIndex must be < size");
 
-		m_freeIndices.push_back(uIndex);
+		m_freeIndices[m_uFreeSize++] = uIndex;
+	}
+
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NStableVector<Type, ALIGN_SIZE, memory>::reserve()
+	{
+		m_freeIndices.resize(m_uSize + m_uReallocSize); NCM_V(memory);
+		m_data.resize(m_uSize + m_uReallocSize);		NCM_V(memory);	// Order is important, because if 1st succeed and 2nd fails, container is still usable.
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NStableVector<Type, ALIGN_SIZE, memory>::reserve(NSize_t uSize)
 	{
-		m_data.reserve(uSize);
-		m_freeIndices.reserve(uSize);	// Checks are done in NVector
+		m_freeIndices.resize(uSize);	NCM_V(memory);
+		m_data.resize(uSize);			NCM_V(memory);	// Order is important, because if 1st succeed and 2nd fails, container is still usable.
 	}
 }
 }

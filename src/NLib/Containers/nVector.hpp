@@ -1,5 +1,6 @@
 #pragma once
-#include "../Memory/nArray.hpp"
+#include "nContainerGuard.hpp"
+#include "nArray.hpp"
 
 namespace NLib {
 namespace Containers
@@ -22,6 +23,7 @@ namespace Containers
 		void		create(NSize_t uSize, NSize_t uReallocSize = 4);
 		void		create(const NVector<Type, ALIGN_SIZE, memory>& src);
 
+		void		reserve();
 		void		reserve(NSize_t uSize);
 		void		resize(NSize_t uSize);
 
@@ -56,7 +58,7 @@ namespace Containers
 		static Memory::NMemory&		getMemory()		{ return memory; }
 
 	private:
-		Memory::NArray<Type, ALIGN_SIZE, memory> m_array;
+		NArray<Type, ALIGN_SIZE, memory> m_array;
 
 		NSize_t m_uSize;
 		NSize_t m_uReallocSize;
@@ -65,14 +67,14 @@ namespace Containers
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NVector<Type, ALIGN_SIZE, memory>::create(NSize_t uSize, NSize_t uReallocSize)
 	{
-		m_array.create(uSize);
+		m_array.create(uSize);			NCM_V(memory);
 		m_uReallocSize = uReallocSize;
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NVector<Type, ALIGN_SIZE, memory>::create(const NVector<Type, ALIGN_SIZE, memory>& src)
 	{
-		m_array.create(src.m_array);
+		m_array.create(src.m_array);	NCM_V(memory);
 
 		m_uReallocSize = src.m_uReallocSize;
 		m_uSize = src.m_uSize;
@@ -90,12 +92,13 @@ namespace Containers
 	{
 		m_array.release();
 		m_uSize = 0;
+		m_uReallocSize = 0;
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NVector<Type, ALIGN_SIZE, memory>::push_back(const Type& element)
 	{
-		if(m_uSize + 1 > m_array.size())	{ m_array.resize(m_array.size() + m_uReallocSize); }
+		if(m_uSize + 1 > m_array.size())	{ m_array.resize(m_array.size() + m_uReallocSize); 	NCM_V(memory); }
 
 		m_array[m_uSize] = element;
 		++m_uSize;
@@ -113,7 +116,7 @@ namespace Containers
 	{
 		NAssert(uIndex < m_uSize, "uIndex must be < m_uSize");
 
-		if(m_uSize + 1 > m_array.size())	{ m_array.resize(m_array.size() + m_uReallocSize); }
+		if(m_uSize + 1 > m_array.size())	{ m_array.resize(m_array.size() + m_uReallocSize);	NCM_V(memory); }
 
 		memcpy(m_array.data() + uIndex + 1, m_array.data() + uIndex, sizeof(Type) * (m_uSize - uIndex - 1));
 		m_array[uIndex] = element;
@@ -161,15 +164,21 @@ namespace Containers
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NVector<Type, ALIGN_SIZE, memory>::reserve()
+	{
+		m_array.resize(m_array.size() + m_uReallocSize);	NCM_V(memory);
+	}
+
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NVector<Type, ALIGN_SIZE, memory>::reserve(NSize_t uSize)
 	{
-		if(uSize > m_array.size())	{ m_array.resize(uSize); }
+		if(uSize > m_array.size())	{ m_array.resize(uSize);	NCM_V(memory); }
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NVector<Type, ALIGN_SIZE, memory>::resize(NSize_t uSize)
 	{
-		if(uSize > m_array.size())	{ m_array.resize(uSize); }
+		if(uSize > m_array.size())	{ m_array.resize(uSize);	NCM_V(memory); }
 		m_uSize = uSize;
 	}
 }
