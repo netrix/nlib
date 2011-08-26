@@ -8,8 +8,8 @@ namespace Memory
 {
 	struct ChunkHead
 	{
-		ChunkHead* pNext;
-		NLib::NSize_t uNumChunks;
+		ChunkHead*	pNext;
+		NSize_t		uNumChunks;
 	};
 
 	struct MemoryChunk
@@ -101,17 +101,14 @@ inline void* operator new[](size_t uSize, NLib::Memory::NMemory& memory, NLib::N
 	return memory.allocate(uSize, uAlignment);
 }
 
-inline void operator delete(void* pMemory, NLib::Memory::NMemory& memory)
+template<typename Type>
+void ndelete(NLib::Memory::NMemory& memory, Type* pObject)
 {
-	memory.release(pMemory);
-}
-
-inline void operator delete[](void* pMemory, NLib::Memory::NMemory& memory)
-{
-	memory.release(pMemory);
+	pObject->~Type();
+	memory.release(pObject);
 }
 
 #define NMemoryInit				NMemory::InitMemory
 #define NMemoryAllocate			NMemory::Allocate
-#define NMemoryRelease			NMemory::release
+#define NMemoryRelease			NMemory::Release
 #define NMemoryGlobal			NMemory::m_instance

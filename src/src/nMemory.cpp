@@ -22,6 +22,8 @@ namespace
 	template<> struct Log2<1> { enum { Value = 0 }; };
 }
 
+#define ALLOCATION_LEAKS
+
 namespace NLib {
 namespace Memory
 {
@@ -77,6 +79,10 @@ namespace Memory
 			return null;
 		}
 
+#ifdef ALLOCATION_LEAKS
+	NLogMessage("Allocated new chunks at address: %#X, count: %u", (NSize_t)pMemory, uAllocSize / sizeof(MemoryChunk));
+#endif
+
 		NLogMessage("OK\n");
 
 		NSize_t uAllocedChunks = uAllocSize / sizeof(MemoryChunk);
@@ -96,13 +102,13 @@ namespace Memory
 
 		// Setting up head
 		ChunkHead* pHead = (ChunkHead*)pFreeChunks;
-		pFreeChunks = pFreeChunks->pNext;
+		pFreeChunks++;
 		pHead->pNext = null;
-		pHead->uNumChunks = m_uNumChunks;
+		pHead->uNumChunks = uAllocedChunks;
 		++m_uNumUsedChunks;
 
 		// Adding Head to memory list
-		if(m_pHeads == null)	{ m_pHeads = pHead; }// First use case
+		if(m_pHeads == null)	{ m_pHeads = pHead; }	// First use case
 		else
 		{
 			pHead->pNext = m_pHeads;
@@ -178,6 +184,10 @@ namespace Memory
 			m_pFreeChunks = m_pFreeChunks->pNext;
 			*pSizePointer = 1;
 			m_uNumUsedChunks++;
+
+#ifdef ALLOCATION_LEAKS
+	NLogMessage("Memory allocation - first chunk: %#X, count: %u", (NSize_t)pSizePointer, 1);
+#endif
 		}
 		else
 		{
@@ -197,12 +207,12 @@ namespace Memory
 			// Found or not
 			if(pFirst == null)
 			{
-				NSize_t uReservationSize = ComplementTo8(max(uRealSize, m_uNumChunks * sizeof(MemoryChunk)));
+				NSize_t uReservationSize = max(uNumChunks, m_uNumChunks) * sizeof(MemoryChunk);
 				pFirst = allocateChunks(uReservationSize);
 
 				if(pFirst == null)	{ return null; }
 
-				pPrevious = appendChunks(pFirst, uReservationSize / sizeof(MemoryChunk) - uNumChunks);
+				pPrevious = appendChunks(pFirst, uReservationSize / sizeof(MemoryChunk));
 			}
 
 			// Updating continuous counter
@@ -212,10 +222,14 @@ namespace Memory
 
 			// Updating continuity of list
 			if(pPrevious == null)	{ m_pFreeChunks = pFirst + uNumChunks; }
-			else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = pFirst + uNumChunks; }
+			else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = (pFirst + uNumChunks - 1)->pNext; }
 
 			*pSizePointer = uNumChunks;
 			m_uNumUsedChunks += uNumChunks;
+
+#ifdef ALLOCATION_LEAKS
+	NLogMessage("Memory allocation - first chunk: %#X, count: %u", (NSize_t)pSizePointer, uNumChunks);
+#endif
 		}
 
 		return pSizePointer != null ? pSizePointer + 1 : null;
@@ -276,7 +290,7 @@ namespace Memory
 
 		// Updating continuity of list
 		if(pPrevious == null)	{ m_pFreeChunks = pFirst + uNumChunks; }
-		else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = pFirst + uNumChunks; }
+		else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = (pFirst + uNumChunks - 1)->pNext; }
 
 		pSizePointer = (NSize_t*)uAlignedOffset - 1;
 		*pSizePointer = uNumChunks - uOffsetBlocks;

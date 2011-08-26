@@ -42,7 +42,7 @@ namespace Containers
 		static Memory::NMemory&		getMemory()		{ return memory; }
 
 	private:
-		Memory::NArray<Type, ALIGN_SIZE, memory> m_data;
+		Containers::NArray<Type, ALIGN_SIZE, memory> m_data;
 		NSize_t m_uSize;
 		NSize_t m_uReallocSize;
 
@@ -98,7 +98,7 @@ namespace Containers
 		{
 			if(m_uActualBack != (m_data.size() - 1))	// In the middle
 			{
-				Memory::NArray<Type, memory> temp;
+				NArray<Type, ALIGN_SIZE, memory> temp;
 				temp.create(m_data.size() + m_uReallocSize);	NCM_V(memory);
 				memcpy(temp.data(), m_data.data() + m_uActualFront, m_data.size() - m_uActualFront);	// Copy front part
 				memcpy(temp.data() + m_data.size() - m_uActualFront, m_data.data(), m_uActualFront);	// Copy back part

@@ -2,7 +2,7 @@
 #pragma warning(disable: 4512)
 
 #include <tut/tut.hpp>
-#include "NLib/Memory/nArray.hpp"
+#include "NLib/Containers/nArray.hpp"
 
 #define OMIT_ASSERTS_TESTS
 
@@ -10,7 +10,7 @@ namespace tut
 {
 	struct ArrayTestData
 	{
-		NLib::Memory::NArray<NLib::NSize_t> array;
+		NLib::Containers::NArray<NLib::NSize_t> array;
 
 		ArrayTestData()
 		{

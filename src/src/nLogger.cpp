@@ -23,10 +23,10 @@ namespace NLib
 	/***********************************************************************/
 	NLogger::~NLogger()
 	{
-		Release();
+		release();
 	}
 	/***********************************************************************/
-	NRESULT NLogger::InitLogger(const char* szFilepath, bool bPrint)
+	NRESULT NLogger::initLogger(const char* szFilepath, bool bPrint)
 	{
 		if(g_pFile != null)		// Logger already created
 		{
@@ -40,12 +40,12 @@ namespace NLib
 			return NRV_FAILED_TO_OPEN_FILE;
 		}
 
-		LogMessage("%s\n", szFilepath);
+		logMessage("%s\n", szFilepath);
 
 		return NRV_SUCCESS;
 	}
 	/***********************************************************************/
-	void NLogger::Release()
+	void NLogger::release()
 	{
 		if(g_pFile != null)
 		{
@@ -54,7 +54,7 @@ namespace NLib
 		}
 	}
 	/***********************************************************************/
-	void NLogger::LogMessage(const char* szFormat, ...)
+	void NLogger::logMessage(const char* szFormat, ...)
 	{
 		if(g_pFile != null)
 		{
@@ -85,7 +85,7 @@ namespace NLib
 		}
 	}
 	/***********************************************************************/
-	void NLogger::LogMessage(const wchar_t* szFormat, ...)
+	void NLogger::logMessage(const wchar_t* szFormat, ...)
 	{
 		if(g_pFile != null)
 		{
