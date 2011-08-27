@@ -375,7 +375,7 @@ namespace Memory
 		m_uNumUsedChunks -= uSize;
 
 		// Keep it clear
-		//releaseUnusedChunks();	// not working
+		releaseUnusedChunks();	// not working
 	}
 	/***********************************************************************/
 	void NMemory::releaseUnusedChunks()
@@ -400,7 +400,10 @@ namespace Memory
 				if(pPreviousHead == null)	{ m_pHeads = pHeads->pNext; }
 				else						{ pPreviousHead->pNext = pHeads->pNext; }
 
-				free(pHeads);
+				ChunkHead* pTempHead = pHeads;
+				pHeads = pHeads->pNext;
+				m_uNumChunks -= pTempHead->uNumChunks;
+				free(pTempHead);
 			}
 			else
 			{
