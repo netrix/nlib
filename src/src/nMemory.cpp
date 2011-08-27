@@ -375,7 +375,7 @@ namespace Memory
 		m_uNumUsedChunks -= uSize;
 
 		// Keep it clear
-		releaseUnusedChunks();
+		//releaseUnusedChunks();	// not working
 	}
 	/***********************************************************************/
 	void NMemory::releaseUnusedChunks()
