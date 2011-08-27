@@ -29,6 +29,8 @@ namespace Memory
 {
 	NMemory NMemory::m_instance;
 
+	MemoryChunk* findPrevInFreeList(MemoryChunk* pChunk, MemoryChunk* pFreeList);
+
 	/***********************************************************************/
 	NMemory::NMemory()	: m_pHeads(null)
 	{
@@ -315,8 +317,8 @@ namespace Memory
 		uSize &= (1 << (sizeof(NSize_t) * 8 - sizeof(MemoryChunk))) - 1;
 
 		// Fixing chunks
-		MemoryChunk* pFirst = (MemoryChunk*)pOffset;
-		MemoryChunk* pChunk = pFirst;
+		MemoryChunk* pFirst = (MemoryChunk*)pOffset;	// ->[............]->_[_....
+		MemoryChunk* pChunk = pFirst;					// ->[............]->[...._]_->[
 
 		for(NSize_t u = 0; u < uSize; ++u)
 		{
@@ -331,23 +333,95 @@ namespace Memory
 			pFirst->uContinuousCount = uSize - 1;
 			(pChunk - 1)->pNext = null;
 		}
+		else if(pFirst < m_pFreeChunks)
+		{
+			(pChunk - 1)->pNext = m_pFreeChunks;
+
+			if(pChunk == m_pFreeChunks)		{ pFirst->uContinuousCount = uSize + pChunk->uContinuousCount; }
+			else							{ pFirst->uContinuousCount = uSize - 1; }
+
+			m_pFreeChunks = pFirst;
+		}
 		else
 		{
-			MemoryChunk* pFreeChunks = m_pFreeChunks;
+			MemoryChunk* pFreeChunks = m_pFreeChunks;		// ->[............_]_->[....
+			MemoryChunk* pPotentialHead = pFreeChunks;		// ->_[_............]->[....
 
-			while(pFreeChunks->pNext != null && pFreeChunks->pNext < pFirst)
+			while(pFreeChunks->pNext != null)
 			{
-				pFreeChunks = pFreeChunks->pNext;
+				pFreeChunks += pFreeChunks->uContinuousCount;
+
+				if(pFreeChunks->pNext < pFirst)
+				{
+					pFreeChunks = pFreeChunks->pNext;
+					pPotentialHead = pFreeChunks;
+				}
+				else	{ break; }
 			}
 
+			// First fix tail counts
+			if(pChunk == pFreeChunks->pNext)	{ pFirst->uContinuousCount = uSize + pFreeChunks->pNext->uContinuousCount; }
+			else								{ pFirst->uContinuousCount = uSize - 1; }
+
+			// Second fix head counts -- todo!
+			if(pPotentialHead != pFreeChunks
+			&& pFreeChunks + 1 == pFirst)		{ pPotentialHead->uContinuousCount += pFirst->uContinuousCount + 1; }
+
+			// Third fix pointers
 			(pChunk - 1)->pNext = pFreeChunks->pNext;
 			pFreeChunks->pNext = pFirst;
-
-			if(pChunk == pFreeChunks->pNext)	{ pFirst->uContinuousCount = uSize + pChunk->uContinuousCount; } // pChunk == pFreeChunks
-			else								{ pFirst->uContinuousCount = uSize - 1; }
 		}
 
 		m_uNumUsedChunks -= uSize;
+
+		// Keep it clear
+		releaseUnusedChunks();
+	}
+	/***********************************************************************/
+	void NMemory::releaseUnusedChunks()
+	{
+		const NSize_t USED_RATE = 3;
+		const NSize_t ALL_RATE = 1;
+
+		ChunkHead* pHeads = m_pHeads;
+		ChunkHead* pPreviousHead = null;
+		while(pHeads != null && m_uNumUsedChunks * USED_RATE > m_uNumChunks * ALL_RATE)
+		{
+			MemoryChunk* pChunk = (MemoryChunk*)pHeads + 1;
+			MemoryChunk* pPrev = null;
+
+			if(pChunk->uContinuousCount + 2 == pHeads->uNumChunks
+			&& (m_pFreeChunks == pChunk
+			|| (pPrev = findPrevInFreeList(pChunk, m_pFreeChunks)) != null))
+			{
+				if(pPrev == null)		{ m_pFreeChunks = (pChunk + pChunk->uContinuousCount)->pNext; }
+				else					{ pPrev->pNext = (pChunk + pChunk->uContinuousCount)->pNext; }
+
+				if(pPreviousHead == null)	{ m_pHeads = pHeads->pNext; }
+				else						{ pPreviousHead->pNext = pHeads->pNext; }
+
+				free(pHeads);
+			}
+			else
+			{
+				pPreviousHead = pHeads;
+				pHeads = pHeads->pNext;
+			}
+		}
+	}
+
+	MemoryChunk* findPrevInFreeList(MemoryChunk* pChunk, MemoryChunk* pFreeList)
+	{
+		MemoryChunk* pPrev = null;
+
+		while(pFreeList != null && pFreeList < pChunk)
+		{
+			pPrev = pFreeList + pFreeList->uContinuousCount;
+			pFreeList = pPrev->pNext;
+		}
+
+		if(pFreeList == pChunk)	{ return pPrev; }
+		else					{ return null; }
 	}
 }
 }
