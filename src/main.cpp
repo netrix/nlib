@@ -25,7 +25,7 @@ int main()
 	tut::runner.get().run_tests();
 
 	//tut::test_result result;
-	//tut::runner.get().run_test("Array tests", 7, result);
+	//tut::runner.get().run_test("Array tests", 19, result);
 
 	return !reporter.all_ok();
 }

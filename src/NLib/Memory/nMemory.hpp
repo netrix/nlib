@@ -37,7 +37,7 @@ namespace Memory
 		bool	outOfMemory()	{ return m_bOutOfMemory; }
 
 	private:
-		MemoryChunk*	allocateChunks(NSize_t uAllocSize);							// Must be complemented to chunks
+		MemoryChunk*	allocateChunks(NSize_t uChunksCount);						// Must be complemented to chunks
 		MemoryChunk* 	appendChunks(MemoryChunk* pChunks, NSize_t uNumChunks);		// Returns pointer to object of appended Chunk
 		void			releaseChunks();
 		void			releaseUnusedChunks();
