@@ -24,7 +24,7 @@ namespace Memory
 		NMemory();
 		~NMemory();
 
-		NRESULT initMemory(NSize_t uReservationSize = 8);
+		NRESULT initMemory(NSize_t uReservationSize = 16);
 		void	releaseMemory();
 
 		void*	allocate(NSize_t uAllocationSize);
@@ -55,7 +55,7 @@ namespace Memory
 		static NMemory m_instance;
 
 	public:
-		static NRESULT	InitMemory(NSize_t uReservationSize = 8)				{ return m_instance.initMemory(uReservationSize); }
+		static NRESULT	InitMemory(NSize_t uReservationSize = 16)				{ return m_instance.initMemory(uReservationSize); }
 		static void		ReleaseMemory()											{ m_instance.releaseMemory(); }
 		static void*	Allocate(NSize_t uAllocationSize)						{ return m_instance.allocate(uAllocationSize); }
 		static void*	Allocate(NSize_t uAllocationSize, NSize_t uAlignment)	{ return m_instance.allocate(uAllocationSize, uAlignment); }

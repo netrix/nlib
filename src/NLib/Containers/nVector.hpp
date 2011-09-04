@@ -98,7 +98,10 @@ namespace Containers
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
 	void NVector<Type, ALIGN_SIZE, memory>::push_back(const Type& element)
 	{
-		if(m_uSize + 1 > m_array.size())	{ m_array.resize(m_array.size() + m_uReallocSize); 	NCM_V(memory); }
+		if(m_uSize + 1 > m_array.size())
+		{
+			m_array.resize(m_array.size() + m_uReallocSize); 	NCM_V(memory);
+		}
 
 		m_array[m_uSize] = element;
 		++m_uSize;

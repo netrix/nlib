@@ -4,10 +4,10 @@
 
 namespace
 {
-	inline NLib::NSize_t ComplementTo8(NLib::NSize_t uValue)
+	inline NLib::NSize_t ComplementToN(NLib::NSize_t uValue, const NLib::NSize_t n)
 	{
-		return (uValue & 0xFFFFFFF8u) == uValue ? uValue : (uValue & 0xFFFFFFF8u) + 8;
-		//return (uValue & 0xFFFFFFFFFFFFFFF0u) == uValue ? uValue : (uValue & 0xFFFFFFFFFFFFFFF0u) + 16;
+		NLib::NSize_t uMask = (NLib::NSize_t)-1 - n + 1;
+		return (uValue & uMask) == uValue ? uValue : (uValue & uMask) + n;
 	}
 
 	// http://msinilo.pl/blog/?p=702
@@ -50,7 +50,7 @@ namespace Memory
 		m_uNumUsedChunks = 0;
 		m_uNumChunks = 0;
 
-		uReservationSize = ComplementTo8(uReservationSize) / sizeof(MemoryChunk);
+		uReservationSize = ComplementToN(uReservationSize, sizeof(MemoryChunk)) / sizeof(MemoryChunk);
 
 		NLogMessage("Initializing memory");
 
@@ -196,13 +196,13 @@ namespace Memory
 		else
 		{
 			// Determining chunks count
-			NSize_t uNumChunks = ComplementTo8(uRealSize) / sizeof(MemoryChunk);
+			NSize_t uNumChunks = ComplementToN(uRealSize, sizeof(MemoryChunk)) / sizeof(MemoryChunk);
 
 			// Looking for enough continuous memory
 			MemoryChunk* pFirst = m_pFreeChunks;
 			MemoryChunk* pPrevious = null;
 
-			while(pFirst != null && (pFirst->uContinuousCount + 1)< uNumChunks)
+			while(pFirst != null && (pFirst->uContinuousCount + 1) < uNumChunks)
 			{
 				pPrevious = pFirst;
 				pFirst = (pFirst + pFirst->uContinuousCount)->pNext;
@@ -219,13 +219,13 @@ namespace Memory
 				pPrevious = appendChunks(pFirst, uReservationSize);
 			}
 
-			// Updating continuous counter
-			if(pFirst->uContinuousCount > uNumChunks - 1)	{ (pFirst + uNumChunks)->uContinuousCount = pFirst->uContinuousCount - uNumChunks; }
+			// Updating continuous counter - if there's more, they need to be updated
+			if((pFirst->uContinuousCount + 1) > uNumChunks)	{ (pFirst + uNumChunks)->uContinuousCount = pFirst->uContinuousCount - uNumChunks; }
 
 			pSizePointer = (NSize_t*)pFirst;
 
 			// Updating continuity of list
-			if(pPrevious == null)	{ m_pFreeChunks = pFirst + uNumChunks; }
+			if(pPrevious == null)	{ m_pFreeChunks = (pFirst + uNumChunks - 1)->pNext;	}
 			else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = (pFirst + uNumChunks - 1)->pNext; }
 
 			*pSizePointer = uNumChunks;
@@ -249,7 +249,7 @@ namespace Memory
 		NSize_t* pSizePointer = null;
 
 		// Determining chunks count
-		NSize_t uNumChunks = ComplementTo8(uAlignmentSize) / sizeof(MemoryChunk);
+		NSize_t uNumChunks = ComplementToN(uAlignmentSize, sizeof(MemoryChunk)) / sizeof(MemoryChunk);
 
 		// Looking for enough continuous memory
 		MemoryChunk* pFirst = m_pFreeChunks;
@@ -264,7 +264,7 @@ namespace Memory
 		// Not found, adding additional space
 		if(pFirst == null)
 		{
-			NSize_t uReservationSize = max(ComplementTo8(uAlignmentSize) / sizeof(MemoryChunk), m_uNumChunks);
+			NSize_t uReservationSize = max(ComplementToN(uAlignmentSize, sizeof(MemoryChunk)) / sizeof(MemoryChunk), m_uNumChunks);
 			pFirst = allocateChunks(uReservationSize);
 
 			if(pFirst == null)	{ return null; }
@@ -273,7 +273,7 @@ namespace Memory
 		}
 
 		// Updating continuous counter
-		if(pFirst->uContinuousCount > uNumChunks - 1)	{ (pFirst + uNumChunks)->uContinuousCount = pFirst->uContinuousCount - uNumChunks; }
+		if((pFirst->uContinuousCount + 1) > uNumChunks)	{ (pFirst + uNumChunks)->uContinuousCount = pFirst->uContinuousCount - uNumChunks; }
 
 		// Calculating offset
 		NSize_t uOffset	= (NSize_t)pFirst + sizeof(NSize_t);
@@ -293,7 +293,7 @@ namespace Memory
 		}
 
 		// Updating continuity of list
-		if(pPrevious == null)	{ m_pFreeChunks = pFirst + uNumChunks; }
+		if(pPrevious == null)	{ m_pFreeChunks = (pFirst + uNumChunks - 1)->pNext;	}
 		else					{ (pPrevious + pPrevious->uContinuousCount)->pNext = (pFirst + uNumChunks - 1)->pNext; }
 
 		pSizePointer = (NSize_t*)uAlignedOffset - 1;
@@ -301,7 +301,8 @@ namespace Memory
 		m_uNumUsedChunks += *pSizePointer;
 
 		// Saving information about offset at the beginning of *pSizePointer
-		*pSizePointer |= ((NSize_t)pSizePointer - (NSize_t)pFirst) << (sizeof(NSize_t) * 8 - Log2<sizeof(MemoryChunk)>::Value);
+		const NSize_t uBitOffset = sizeof(NSize_t) * 8 - Log2<sizeof(MemoryChunk)>::Value;
+		*pSizePointer |= ((NSize_t)pSizePointer - (NSize_t)pFirst) << uBitOffset;
 
 		return pSizePointer != null ? pSizePointer + 1 : null;
 	}
@@ -361,7 +362,7 @@ namespace Memory
 			if(pChunk == pFreeChunks->pNext)	{ pFirst->uContinuousCount = uSize + pFreeChunks->pNext->uContinuousCount; }
 			else								{ pFirst->uContinuousCount = uSize - 1; }
 
-			// Second fix head counts -- todo!
+			// Second fix head counts
 			if(pFreeChunks + 1 == pFirst)		{ pPotentialHead->uContinuousCount += pFirst->uContinuousCount + 1; }
 
 			// Third fix pointers
