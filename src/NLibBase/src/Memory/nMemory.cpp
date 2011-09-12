@@ -1,6 +1,6 @@
-#include "../NLib/Memory/nMemory.hpp"
-#include "../NLib/nLogger.hpp"
-#include "../NLib/nAssert.hpp"
+#include "../../NLib/Memory/nMemory.hpp"
+#include "../../NLib/nLogger.hpp"
+#include "../../NLib/nAssert.hpp"
 
 namespace
 {

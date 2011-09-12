@@ -1,0 +1,2 @@
++Divide NLib to several libraries: Base, Memory (Base), Containers(Memory), Utilities(Base) ? - think about it
++NUtilities osobno?

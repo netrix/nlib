@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\NLib">
+      <UniqueIdentifier>{64e6f1a3-4328-46f9-b14b-fc851da15d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src">
+      <UniqueIdentifier>{9c72f83a-9568-4382-943b-9acfa11e730d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\NLib\CmdLineParser">
+      <UniqueIdentifier>{1f590fa6-9bba-48a7-92c5-c58b0ad085ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\NLib\FileSystem">
+      <UniqueIdentifier>{8054aca6-5a08-4d37-b3f7-7c5e0c5da57f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\NLib\Images">
+      <UniqueIdentifier>{0ad0b50a-fd49-463d-9b74-8205f72d1ece}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\NLib\Sockets">
+      <UniqueIdentifier>{87c6649f-d541-42e8-95aa-ba869d888395}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\CmdLineParser">
+      <UniqueIdentifier>{803014d1-7411-4613-b7c5-619a5d263ef3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\Images">
+      <UniqueIdentifier>{a84b8c14-012e-41bb-b02b-7f9e8292c32f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\Sockets">
+      <UniqueIdentifier>{4dd155ea-e010-4925-b1c0-3fb9dc602bc9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\NLibUtilities\NLib\CmdLineParser\nArguments.hpp">
+      <Filter>source\NLib\CmdLineParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLibUtilities\NLib\CmdLineParser\nCommandWalker.hpp">
+      <Filter>source\NLib\CmdLineParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLibUtilities\NLib\Images\nBitmap.hpp">
+      <Filter>source\NLib\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\NLibUtilities\NLib\Sockets\Sockets.hpp">
+      <Filter>source\NLib\Sockets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\NLibUtilities\src\CmdLineParser\nArguments.cpp">
+      <Filter>source\src\CmdLineParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\NLibUtilities\src\CmdLineParser\nCommandWalker.cpp">
+      <Filter>source\src\CmdLineParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\NLibUtilities\src\Images\nBitmap.cpp">
+      <Filter>source\src\Images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\NLibUtilities\src\Sockets\Sockets.cpp">
+      <Filter>source\src\Sockets</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

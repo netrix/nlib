@@ -1,8 +1,8 @@
 #pragma once
-#include "../Containers/nArray.hpp"
+#include <Containers/nArray.hpp>
 
 namespace NLib {
-namespace Utilities
+namespace Images
 {
 	class NBitmap
 	{

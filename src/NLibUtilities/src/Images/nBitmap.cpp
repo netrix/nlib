@@ -1,6 +1,6 @@
-#include "../NLib/Utilities/nBitmap.hpp"
-#include "../NLib/nAssert.hpp"
-#include "../NLib/nLogger.hpp"
+#include "../../NLib/Images/nBitmap.hpp"
+#include <nAssert.hpp>
+#include <nLogger.hpp>
 #include <stdio.h>
 #include <string.h>
 
@@ -27,7 +27,7 @@ namespace
 }
 
 namespace NLib {
-namespace Utilities
+namespace Images
 {
 	NBitmap::NBitmap()
 		: m_uWidth(0)
@@ -45,7 +45,7 @@ namespace Utilities
 	{
 		NAssert(m_aBitmap == false, "release bitmap first");
 
-		m_aBitmap.create(uWidth * uHeight * uBitsPerPixel);
+		m_aBitmap.create(uWidth * uHeight * uBitsPerPixel);	NCM_V_GLOBAL;
 		m_uHeight = uHeight;
 		m_uWidth = uWidth;
 		m_uBitsPerPixel = uBitsPerPixel;

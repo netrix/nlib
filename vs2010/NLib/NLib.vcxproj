@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3B14AC68-2DC9-4DF1-BA36-3401F94ACEEA}</ProjectGuid>
     <RootNamespace>NLib</RootNamespace>
+    <ProjectName>NLibBase</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -143,36 +144,34 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\NLib\Containers\nArray.hpp" />
-    <ClInclude Include="..\..\src\NLib\Containers\nContainerGuard.hpp" />
-    <ClInclude Include="..\..\src\NLib\Containers\nQueue.hpp" />
-    <ClInclude Include="..\..\src\NLib\Containers\nStableVector.hpp" />
-    <ClInclude Include="..\..\src\NLib\Containers\nVector.hpp" />
-    <ClInclude Include="..\..\src\NLib\Math\nMath.hpp" />
-    <ClInclude Include="..\..\src\NLib\Memory\nMemory.hpp" />
-    <ClInclude Include="..\..\src\NLib\Memory\nMemoryGuard.hpp" />
-    <ClInclude Include="..\..\src\NLib\nAssert.hpp" />
-    <ClInclude Include="..\..\src\NLib\nBase.hpp" />
-    <ClInclude Include="..\..\src\NLib\nErrors.hpp" />
-    <ClInclude Include="..\..\src\NLib\nLogger.hpp" />
-    <ClInclude Include="..\..\src\NLib\Utilities\nBitmap.hpp" />
-    <ClInclude Include="..\..\src\NLib\Utilities\nString.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\Containers\nArray.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\Containers\nContainerGuard.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\Containers\nQueue.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\Containers\nStableVector.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\Containers\nVector.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\Math\nMath.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\Memory\nMemory.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\Memory\nMemoryGuard.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\nAssert.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\nBase.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\nErrors.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\nLogger.hpp" />
+    <ClInclude Include="..\..\src\NLibBase\NLib\Utilities\nString.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\src\nAssert.cpp" />
-    <ClCompile Include="..\..\src\src\nBitmap.cpp" />
-    <ClCompile Include="..\..\src\src\nLogger.cpp" />
-    <ClCompile Include="..\..\src\src\nMath.cpp" />
-    <ClCompile Include="..\..\src\src\nMemory.cpp" />
+    <ClCompile Include="..\..\src\NLibBase\src\Math\nMath.cpp" />
+    <ClCompile Include="..\..\src\NLibBase\src\Memory\nMemory.cpp" />
+    <ClCompile Include="..\..\src\NLibBase\src\nAssert.cpp" />
+    <ClCompile Include="..\..\src\NLibBase\src\nLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\NLib\Math\nMMatrix.inl" />
-    <None Include="..\..\src\NLib\Math\nMTransforms.inl" />
-    <None Include="..\..\src\NLib\Math\nMUtilities.inl" />
-    <None Include="..\..\src\NLib\Math\nMVector.inl" />
-    <None Include="..\..\src\NLib\Math\nMVector2f.inl" />
-    <None Include="..\..\src\NLib\Math\nMVector3f.inl" />
-    <None Include="..\..\src\NLib\Math\nMVector4f.inl" />
+    <None Include="..\..\src\NLibBase\NLib\Math\nMMatrix.inl" />
+    <None Include="..\..\src\NLibBase\NLib\Math\nMTransforms.inl" />
+    <None Include="..\..\src\NLibBase\NLib\Math\nMUtilities.inl" />
+    <None Include="..\..\src\NLibBase\NLib\Math\nMVector.inl" />
+    <None Include="..\..\src\NLibBase\NLib\Math\nMVector2f.inl" />
+    <None Include="..\..\src\NLibBase\NLib\Math\nMVector3f.inl" />
+    <None Include="..\..\src\NLibBase\NLib\Math\nMVector4f.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
