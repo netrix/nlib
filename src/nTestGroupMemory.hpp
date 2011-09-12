@@ -2,7 +2,7 @@
 #pragma warning(disable: 4512)
 
 #include <tut/tut.hpp>
-#include "NLib/Memory/nMemory.hpp"
+#include <NLib/Memory/nMemory.hpp>
 
 #define OMIT_ASSERTS_TESTS
 
