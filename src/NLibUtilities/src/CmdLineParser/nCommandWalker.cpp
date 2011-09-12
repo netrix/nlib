@@ -6,7 +6,7 @@ Website:	http://www.netrix.org.pl/
 
 *********************************************************************/
 #include "../../NLib/CmdLineParser/nCommandWalker.hpp"
-#include <Utilities/nString.hpp>
+#include <NLib/Utilities/nString.hpp>
 #include <stdio.h>
 using namespace NLib::Utilities;
 

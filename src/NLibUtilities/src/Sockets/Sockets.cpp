@@ -9,7 +9,7 @@ License:	GNU GPL
 #include "../../NLib/Sockets/Sockets.hpp"
 #include <string.h>
 #include <stdio.h>
-#include "nLogger.hpp"
+#include <NLib/nLogger.hpp>
 
 #ifdef _WIN32
 	#include <winsock2.h>

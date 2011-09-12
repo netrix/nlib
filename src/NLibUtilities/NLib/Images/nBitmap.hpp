@@ -1,5 +1,5 @@
 #pragma once
-#include <Containers/nArray.hpp>
+#include <NLib/Containers/nArray.hpp>
 
 namespace NLib {
 namespace Images

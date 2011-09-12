@@ -7,7 +7,7 @@ License:	GNU GPL
 
 *********************************************************************/
 #pragma once
-#include <Containers/nVector.hpp>
+#include <NLib/Containers/nVector.hpp>
 
 namespace NLib {
 namespace CmdLineParser

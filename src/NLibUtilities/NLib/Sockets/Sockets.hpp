@@ -25,7 +25,7 @@ License:	GNU GPL
 	#define closesocket close
 #endif
 
-#include <nBase.hpp>
+#include <NLib/nBase.hpp>
 #define BUFFER_SIZE 2048
 
 #pragma warning(disable: 4996)
