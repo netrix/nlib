@@ -1,6 +1,6 @@
-#include "../../NLib/Images/nBitmap.hpp"
-#include <NLib/nAssert.hpp>
-#include <NLib/nLogger.hpp>
+#include <NLib/Images/nBitmap.hpp>
+#include <NLib/Base/nAssert.hpp>
+#include <NLib/Base/nLogger.hpp>
 #include <stdio.h>
 #include <string.h>
 

@@ -6,7 +6,7 @@ Website:	http://www.netrix.org.pl/
 License:	GNU GPL
 
 *********************************************************************/
-#include "../../NLib/CmdLineParser/nArguments.hpp"
+#include <NLib/CmdLineParser/nArguments.hpp>
 
 namespace NLib {
 namespace CmdLineParser

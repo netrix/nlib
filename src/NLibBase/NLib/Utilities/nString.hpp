@@ -1,5 +1,6 @@
 #pragma once
-#include "../nBase.hpp"
+#include "../Base/nBase.hpp"
+#include <cwchar>
 
 namespace NLib {
 namespace Utilities

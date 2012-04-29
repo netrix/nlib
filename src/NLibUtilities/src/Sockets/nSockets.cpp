@@ -6,10 +6,10 @@ Website:	http://www.netrix.org.pl/
 License:	GNU GPL
 
 *********************************************************************/
-#include "../../NLib/Sockets/Sockets.hpp"
+#include <NLib/Sockets/nSockets.hpp>
 #include <string.h>
 #include <stdio.h>
-#include <NLib/nLogger.hpp>
+#include <NLib/Base/nLogger.hpp>
 
 #ifdef _WIN32
 	#include <winsock2.h>

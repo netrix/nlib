@@ -1,0 +1,2 @@
+add_subdirectory(NLibBase)
+add_subdirectory(NLibUtilities)

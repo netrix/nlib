@@ -2,7 +2,7 @@
 
 #include "nContainerGuard.hpp"
 #include "../Memory/nMemory.hpp"	// nBase.hpp, nErrors.hpp
-#include "../nAssert.hpp"			// nBase.hpp
+#include "../Base/nAssert.hpp"		// nBase.hpp
 #include <string.h>					// memcpy
 
 namespace NLib {

@@ -1,4 +1,4 @@
-#include "../NLib/nAssert.hpp"
+#include <NLib/Base/nAssert.hpp>
 
 #ifdef _DEBUG
 	#include <stdio.h>

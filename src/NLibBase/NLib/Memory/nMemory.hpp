@@ -1,7 +1,6 @@
 #pragma once
-#include "nMemoryGuard.hpp"
-#include "../nBase.hpp"
-#include "../nErrors.hpp"
+#include <NLib/Base/nBase.hpp>
+#include <NLib/Base/nErrors.hpp>
 
 namespace NLib {
 namespace Memory
@@ -113,3 +112,5 @@ void ndelete(NLib::Memory::NMemory& memory, Type* pObject)
 #define NMemoryAllocate			NMemory::Allocate
 #define NMemoryRelease			NMemory::Release
 #define NMemoryGlobal			NMemory::m_instance
+
+#include "nMemoryGuard.hpp"

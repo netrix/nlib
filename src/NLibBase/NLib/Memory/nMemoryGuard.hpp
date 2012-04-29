@@ -1,10 +1,11 @@
 #pragma once
+/**
+ *	This file is included in nMemory.hpp 
+ */
 
 namespace NLib {
 namespace Memory
 {
-	class NMemory;
-
 	template<NMemory& memory>
 	class NMemoryGuard
 	{

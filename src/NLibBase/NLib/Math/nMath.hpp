@@ -1,5 +1,5 @@
 #pragma once
-#include "../nBase.hpp"
+#include "../Base/nBase.hpp"
 #include <math.h>
 
 #ifdef _SSE_ENABLED
