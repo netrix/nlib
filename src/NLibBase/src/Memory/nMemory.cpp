@@ -111,13 +111,13 @@ namespace Memory
 		if(m_pHeads == null)	// First use case
 		{
 			pHead->pNext = null;
-			m_pHeads = pHead;
 		}
 		else
 		{
 			pHead->pNext = m_pHeads;
-			m_pHeads = pHead;
 		}
+
+		m_pHeads = pHead;
 
 		m_uNumChunks += uChunksCount;
 
