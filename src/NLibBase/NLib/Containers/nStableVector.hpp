@@ -21,6 +21,7 @@ namespace Containers
 		void		clear();
 		void		release();
 
+		void		reserve(NSize_t* ouNewIndex);
 		void		insert(const Type& element, NSize_t* ouNewIndex);
 		void		remove(NSize_t uIndex);
 
@@ -90,7 +91,7 @@ namespace Containers
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
-	void NStableVector<Type, ALIGN_SIZE, memory>::insert(const Type& element, NSize_t* ouNewIndex)
+	void NStableVector<Type, ALIGN_SIZE, memory>::reserve(NSize_t* ouNewIndex)
 	{
 		NAssert(ouNewIndex != null, "Invalid output pointer");
 
@@ -102,14 +103,21 @@ namespace Containers
 				m_data.resize(m_uSize + m_uReallocSize);		NCM_V(memory);	// Order is important, because if 1st succeed and 2nd fails, container is still usable.
 			}
 
-			m_data[m_uSize] = element;
 			*ouNewIndex = m_uSize++;
 		}
 		else
 		{
 			*ouNewIndex = m_freeIndices[--m_uFreeSize];
-			m_data[*ouNewIndex] = element;
 		}
+	}
+
+	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
+	void NStableVector<Type, ALIGN_SIZE, memory>::insert(const Type& element, NSize_t* ouNewIndex)
+	{
+		NAssert(ouNewIndex != null, "Invalid output pointer");
+
+		reserve(ouNewIndex);	NCM_V(memory);
+		m_data[*ouNewIndex] = element;
 	}
 
 	template<typename Type, unsigned ALIGN_SIZE, Memory::NMemory& memory>
