@@ -4,7 +4,7 @@
 #include "nTestGroupQueue.hpp"
 
 #include <tut_reporter.h>
-#include "NLib/nLogger.hpp"
+#include <NLib/Base/nLogger.hpp>
 
 using namespace NLib;
 using namespace Memory;

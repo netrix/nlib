@@ -2,6 +2,7 @@
 #define TUT_RESULT_H_GUARD
 
 #include <string>
+#include <unistd.h>	// 3.05.2012 Netrix
 
 namespace tut
 {

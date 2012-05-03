@@ -1,10 +1,2 @@
-include_directories(".")
-
-add_subdirectory(NLib/Base)
-add_subdirectory(NLib/CmdLineParser)
-add_subdirectory(NLib/Containers)
-add_subdirectory(NLib/Images)
-add_subdirectory(NLib/Math)
-add_subdirectory(NLib/Memory)
-add_subdirectory(NLib/Sockets)
-add_subdirectory(NLib/Utilities)
+add_subdirectory(NLib)
+add_subdirectory(tests)

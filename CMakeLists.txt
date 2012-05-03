@@ -7,4 +7,7 @@ project(NLib)
 # Remove unreferenced functions
 #set(EXTRA_C_FLAGS_RELEASE ${EXTRA_C_FLAGS_RELEASE} /Zi)
 
+include_directories(include/tut)
+include_directories(src)
+
 add_subdirectory(src)

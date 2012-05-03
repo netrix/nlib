@@ -1,0 +1,8 @@
+add_subdirectory(Base)
+add_subdirectory(CmdLineParser)
+add_subdirectory(Containers)
+add_subdirectory(Images)
+add_subdirectory(Math)
+add_subdirectory(Memory)
+add_subdirectory(Sockets)
+add_subdirectory(Utilities)

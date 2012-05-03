@@ -127,7 +127,7 @@ namespace Containers
 		if(m_uActualBack < m_uActualFront)	// In the middle
 		{
 			NArray<Type> temp;
-			temp.create(uSize);	NCM_V(memory);
+			temp.create(m_data.size() + m_uReallocSize);	NCM_V(memory);
 			memcpy(temp.data(), m_data.data() + m_uActualFront, m_data.size() - m_uActualFront);	// Copy front part
 			memcpy(temp.data() + m_data.size() - m_uActualFront, m_data.data(), m_uActualFront);	// Copy back part
 			m_uActualFront = 0;
