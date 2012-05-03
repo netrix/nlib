@@ -1,4 +1,4 @@
-#include <NLib/Memory/nMemory.hpp>
+#include "nMemory.hpp"
 #include <NLib/Base/nLogger.hpp>
 #include <NLib/Base/nAssert.hpp>
 

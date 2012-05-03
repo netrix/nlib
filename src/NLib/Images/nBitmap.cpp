@@ -1,4 +1,4 @@
-#include <NLib/Images/nBitmap.hpp>
+#include "nBitmap.hpp"
 #include <NLib/Base/nAssert.hpp>
 #include <NLib/Base/nLogger.hpp>
 #include <stdio.h>

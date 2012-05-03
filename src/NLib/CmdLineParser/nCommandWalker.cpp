@@ -5,7 +5,7 @@ Author:		Kamil Szatkowski "Netrix" (C)
 Website:	http://www.netrix.org.pl/
 
 *********************************************************************/
-#include <NLib/CmdLineParser/nCommandWalker.hpp>
+#include "nCommandWalker.hpp"
 #include <NLib/Utilities/nString.hpp>
 #include <stdio.h>
 using namespace NLib::Utilities;

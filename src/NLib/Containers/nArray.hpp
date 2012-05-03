@@ -1,8 +1,8 @@
 #pragma once
 
 #include "nContainerGuard.hpp"
-#include "../Memory/nMemory.hpp"	// nBase.hpp, nErrors.hpp
-#include "../Base/nAssert.hpp"		// nBase.hpp
+#include <NLib/Base/nAssert.hpp>	// nBase.hpp
+#include <NLib/Memory/nMemory.hpp>	// nBase.hpp, nErrors.hpp
 #include <string.h>					// memcpy
 
 namespace NLib {

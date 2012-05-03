@@ -1,4 +1,4 @@
-#include <NLib/Math/nMath.hpp>
+#include "nMath.hpp"
 
 namespace NLib {
 namespace Math

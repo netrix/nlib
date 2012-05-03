@@ -1,5 +1,5 @@
-#include <NLib/Base/nLogger.hpp>
-#include <NLib/Base/nAssert.hpp>
+#include "nLogger.hpp"
+#include "nAssert.hpp"
 #include <time.h>
 #include <stdarg.h>
 #include <stdio.h>

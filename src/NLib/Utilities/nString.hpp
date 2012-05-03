@@ -1,5 +1,5 @@
 #pragma once
-#include "../Base/nBase.hpp"
+#include <NLib/Base/nBase.hpp>
 #include <cwchar>
 
 namespace NLib {

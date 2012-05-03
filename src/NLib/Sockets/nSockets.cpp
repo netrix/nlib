@@ -6,7 +6,7 @@ Website:	http://www.netrix.org.pl/
 License:	GNU GPL
 
 *********************************************************************/
-#include <NLib/Sockets/nSockets.hpp>
+#include "nSockets.hpp"
 #include <string.h>
 #include <stdio.h>
 #include <NLib/Base/nLogger.hpp>
