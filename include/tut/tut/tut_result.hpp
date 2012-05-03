@@ -2,7 +2,10 @@
 #define TUT_RESULT_H_GUARD
 
 #include <string>
-#include <unistd.h>	// 3.05.2012 Netrix
+
+#if defined(TUT_USE_POSIX)
+	#include <unistd.h>	// 3.05.2012 Netrix
+#endif
 
 namespace tut
 {
