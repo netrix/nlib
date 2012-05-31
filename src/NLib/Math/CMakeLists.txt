@@ -1,5 +1,5 @@
 set(HPP nMMatrix.inl
-		nMTransfoms.inl
+		nMTransforms.inl
 		nMUtilities.inl
 		nMVector.inl
 		nMVector2f.inl
@@ -11,7 +11,7 @@ set(CPP nMath.cpp)
 
 set(NAME "nmath")
 
-add_library(${NAME} ${CPP})
+add_library(${NAME} ${HPP} ${CPP})
 
 install(FILES ${HPP} DESTINATION include/NLib/Math)
 install(TARGETS ${NAME} DESTINATION lib)

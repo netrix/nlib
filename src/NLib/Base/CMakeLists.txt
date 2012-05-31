@@ -8,7 +8,7 @@ set(CPP nAssert.cpp
 
 set(NAME "nbase")
 
-add_library(${NAME} ${CPP})
+add_library(${NAME} ${HPP} ${CPP})
 
 install(FILES ${HPP} DESTINATION include/NLib/Base)
 install(TARGETS ${NAME} DESTINATION lib)

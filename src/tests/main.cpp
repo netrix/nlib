@@ -1,31 +1,10 @@
-#include "nTestGroupMemory.hpp"
-#include "nTestGroupArray.hpp"
-#include "nTestGroupVector.hpp"
-#include "nTestGroupQueue.hpp"
-
-#include <tut_reporter.h>
+#include <gtest/gtest.h>
+#include <NLib/Base/nAssert.hpp>
 #include <NLib/Base/nLogger.hpp>
 
-using namespace NLib;
-using namespace Memory;
-using namespace Containers;
-
-namespace tut
+int main(int argc, char** argv)
 {
-	test_runner_singleton runner;
-}
-
-int main()
-{
-	NLogInit("NLib.log");
-
-	tut::reporter reporter;					// xml_reporter !!!
-
-	tut::runner.get().set_callback(&reporter);
-	tut::runner.get().run_tests();
-
-	//tut::test_result result;
-	//tut::runner.get().run_test("Array tests", 19, result);
-
-	return !reporter.all_ok();
+	testing::InitGoogleTest(&argc, argv);
+	NLib::NAssert_StdAssert = true;
+	return RUN_ALL_TESTS();
 }

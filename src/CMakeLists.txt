@@ -1,2 +1,5 @@
 add_subdirectory(NLib)
-#add_subdirectory(tests)
+
+if(${BUILD_UNITTESTS})
+	add_subdirectory(tests)
+endif()

@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 2.8)
 project(NLib)
 
-# Whole program optimization
-#set(EXTRA_C_FLAGS_RELEASE ${EXTRA_C_FLAGS_RELEASE} /GL)
+# Tests
+option(BUILD_UNITTESTS "Build Unit tests" 0)
 
-# Remove unreferenced functions
-#set(EXTRA_C_FLAGS_RELEASE ${EXTRA_C_FLAGS_RELEASE} /Zi)
+if(${BUILD_UNITTESTS})
+	add_subdirectory(modules/gtest)
+	include_directories(modules/gtest/include)
+endif()
 
-include_directories(include/tut)
+# Project files
 include_directories(src)
 
 add_subdirectory(src)

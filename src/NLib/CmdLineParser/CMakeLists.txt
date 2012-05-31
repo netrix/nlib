@@ -6,7 +6,7 @@ set(CPP nArguments.cpp
 
 set(NAME "ncmdlineparser")
 
-add_library(${NAME} ${CPP})
+add_library(${NAME} ${HPP} ${CPP})
 
 install(FILES ${HPP} DESTINATION include/NLib/CmdLineParser)
 install(TARGETS ${NAME} DESTINATION lib)

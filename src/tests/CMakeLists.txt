@@ -1,6 +1,17 @@
+set(NAME nlib-tests)
 
-set(NAME nlib-test)
+set(HPP nTestGroupMemory.hpp
+		nTestGroupArray.hpp
+		nTestGroupVector.hpp
+		nTestGroupQueue.hpp)
 
-add_executable(${NAME} main.cpp)
+set(CPP main.cpp
+		nTestMemory.cpp)
 
-target_link_libraries(${NAME} nbase nmemory)
+set(DEPENDECIES nbase
+				nmemory
+
+				gtest)
+
+add_executable(${NAME} ${HPP} ${CPP})
+target_link_libraries(${NAME} ${DEPENDECIES})

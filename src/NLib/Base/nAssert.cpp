@@ -5,6 +5,8 @@
 
 	namespace NLib
 	{
+		bool NAssert_StdAssert = false;
+
 		bool NAssertFunction(bool bResult, const char* szExpression, const char* szDescription, const char* szLine, const char* szFilename, const char* szFunction, bool* pbIgnoreAlways)
 		{
 			if(bResult)

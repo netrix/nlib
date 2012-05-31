@@ -33,18 +33,22 @@ namespace Memory
 	MemoryChunk* findPrevInFreeList(MemoryChunk* pChunk, MemoryChunk* pFreeList);
 
 	/***********************************************************************/
-	NMemory::NMemory()	: m_pHeads(null)
+	NMemory::NMemory()
+		: m_pHeads(null)
+		, m_uNumChunks(0)
+		, m_uNumUsedChunks(0)
 	{
 	}
 	/***********************************************************************/
 	NMemory::~NMemory()
 	{
-		releaseChunks();
+		releaseMemory();
 	}
 	/***********************************************************************/
 	NRESULT NMemory::initMemory(NSize_t uReservationSize)
 	{
 		NAssert(uReservationSize > 0, "Invalid parameter");
+		NAssert(m_pHeads == null, "Double initialization");
 
 		m_bOutOfMemory = false;
 		m_uNumUsedChunks = 0;
@@ -64,6 +68,8 @@ namespace Memory
 	{
 		releaseChunks();
 		m_pHeads = null;
+		m_uNumChunks = 0;
+		m_uNumUsedChunks = 0;
 	}
 	/***********************************************************************/
 	MemoryChunk* NMemory::allocateChunks(NSize_t uChunksCount)
