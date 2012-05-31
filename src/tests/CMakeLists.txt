@@ -1,7 +1,6 @@
 set(NAME nlib-tests)
 
-set(HPP nTestGroupVector.hpp
-		nTestGroupQueue.hpp)
+set(HPP	nTestGroupQueue.hpp)
 
 set(CPP main.cpp
 		nTestMemory.cpp
