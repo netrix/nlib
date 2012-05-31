@@ -96,7 +96,7 @@ TEST_F(NTestMemory, Allocate1)
 	memoryObject.initMemory(256);
 
 	void* pMemory = memoryObject.allocate(1);
-	EXPECT_NE(pMemory, nullptr);
+	EXPECT_NE(pMemory, (void*)null);
 	EXPECT_EQ(memoryObject.getAllocatedChunksCount(), 2);
 	EXPECT_EQ(memoryObject.getChunksCount(), 17);
 }

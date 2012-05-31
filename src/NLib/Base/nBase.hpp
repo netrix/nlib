@@ -45,10 +45,12 @@ namespace NLib
 #define NMAX_UINT32 0xffffffffu
 #define NMAX_SIZE_T (NLib::NSize_t)-1
 
+// Memory
 #define null 0
 #define NNEW new (std::nothrow)
 #define NUNUSED(value) value;
 
+// Aligns
 #ifdef _MSC_VER
 	#define _NINLINE __forceinline
 	#define _NALIGN_16 __declspec(align(16))
@@ -61,6 +63,7 @@ namespace NLib
 	#define NAlignedFree(ptr) free(ptr);
 #endif
 
+// Deletes
 #define NDELETE(ptr) {delete ptr;}
 #define NDELETEARR(ptr) {delete[] ptr;}
 #define NRELEASE(ptr) {ptr->Release();}
