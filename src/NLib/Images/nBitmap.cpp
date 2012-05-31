@@ -148,7 +148,7 @@ namespace Images
 		BitmapMagic bmpMagic = { 'B', 'M' };
 		BitmapHeader bmpHeader =
 		{
-			uColorDataOffset + uColorDataSize,
+			(NUint32)(uColorDataOffset + uColorDataSize),
 			{ 0, 0 },
 			uColorDataOffset
 		};
