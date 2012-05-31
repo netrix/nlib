@@ -4,6 +4,18 @@
 #include <NLib/Memory/nMemory.hpp>
 #include <NLib/Base/nAssert.hpp>
 
+namespace
+{
+	// http://msinilo.pl/blog/?p=702
+	template<size_t V>
+	struct Log2
+	{
+		enum	{ Value = Log2<V / 2>::Value + 1 };
+		typedef char V_MustBePowerOfTwo[((V & (V - 1)) == 0 ? 1 : -1)];
+	};
+	template<> struct Log2<1> { enum { Value = 0 }; };
+}
+
 class NTestMemory : public testing::Test
 {
 protected:
@@ -28,8 +40,22 @@ protected:
 
 		void* pMemory = memoryObject.allocate(bytes);
 		EXPECT_NE((void*)null, pMemory);
-		EXPECT_EQ(bytesToChunks(bytes) + 1, memoryObject.getAllocatedChunksCount());
-		EXPECT_EQ(bytes > INITIAL_ALLOC ? bytesToChunks(bytes) + 2 : bytesToChunks(INITIAL_ALLOC) + 1, memoryObject.getChunksCount());
+		EXPECT_GE(memoryObject.getAllocatedChunksCount(), bytesToChunks(bytes));
+		EXPECT_GE(memoryObject.getChunksCount(), memoryObject.getAllocatedChunksCount());
+	}
+
+	template<NLib::NSize_t init, NLib::NSize_t alignment>
+	void TestAlignment(NLib::NSize_t bytes)
+	{
+		const NLib::NSize_t INITIAL_ALLOC = init;
+		memoryObject.initMemory(INITIAL_ALLOC);
+
+		void* pMemory = memoryObject.allocate(bytes, alignment);
+		EXPECT_NE((void*)null, pMemory);
+
+		NLib::NSize_t uVal = (NLib::NSize_t)pMemory;
+		NLib::NSize_t shift = Log2<alignment>::Value;
+		EXPECT_EQ(((uVal >> shift) << shift), uVal);
 	}
 
 	NLib::Memory::NMemory memoryObject;
@@ -105,77 +131,46 @@ TEST_F(NTestMemory, Allocate1)
 
 TEST_F(NTestMemory, Allocate2)
 {
-	memoryObject.initMemory(256);
-
-	void* pMemory = memoryObject.allocate(2);
-	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(2, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
+	TestAllocate(2);
 }
 
 TEST_F(NTestMemory, Allocate4)
 {
-	memoryObject.initMemory(256);
-
-	void* pMemory = memoryObject.allocate(4);
-	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(2, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
+	TestAllocate(4);
 }
 
 TEST_F(NTestMemory, Allocate6)
 {
-	memoryObject.initMemory(256);
-
-	void* pMemory = memoryObject.allocate(6);
-	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(2, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
+	TestAllocate(6);
 }
 
 TEST_F(NTestMemory, Allocate8)
 {
-	memoryObject.initMemory(256);
-
-	void* pMemory = memoryObject.allocate(8);
-	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(2, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
+	TestAllocate(8);
 }
 
 TEST_F(NTestMemory, Allocate256)
 {
-	memoryObject.initMemory(256);
-
-	void* pMemory = memoryObject.allocate(256);
-	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(19, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(35, memoryObject.getChunksCount());
+	TestAllocate(256);
 }
 
 TEST_F(NTestMemory, Allocate4641)
 {
-	memoryObject.initMemory(256);
-
-	void* pMemory = memoryObject.allocate(4641);
-	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(293, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(309, memoryObject.getChunksCount());
+	TestAllocate(4641);
 }
 
 TEST_F(NTestMemory, AllocateRelease41)
 {
 	memoryObject.initMemory(256);
 
+	NLib::NSize_t uAllocated = memoryObject.getAllocatedChunksCount();
+
 	void* pMemory = memoryObject.allocate(41);
 	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(5, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
 
 	memoryObject.release(pMemory);
 
-	EXPECT_EQ(1, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
+	EXPECT_EQ(uAllocated, memoryObject.getAllocatedChunksCount());
 }
 
 TEST_F(NTestMemory, Reallocation)
@@ -184,40 +179,11 @@ TEST_F(NTestMemory, Reallocation)
 
 	void* pMemory = memoryObject.allocate(41);
 	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(5, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
 
 	memoryObject.release(pMemory);
-
-	EXPECT_EQ(1, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
 
 	pMemory = memoryObject.allocate(413);
-
 	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(29, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(45, memoryObject.getChunksCount());
-}
-
-TEST_F(NTestMemory, ReallocationSwapped)
-{
-	memoryObject.initMemory(256);
-
-	void* pMemory = memoryObject.allocate(413);
-	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(29, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(45, memoryObject.getChunksCount());
-
-	memoryObject.release(pMemory);
-
-	EXPECT_EQ(2, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(45, memoryObject.getChunksCount());
-
-	pMemory = memoryObject.allocate(41);
-
-	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(6, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(45, memoryObject.getChunksCount());
 }
 
 // Aligned allocation tests
@@ -226,4 +192,24 @@ TEST_F(NTestMemory, AlignedAllocateAssert)
 	memoryObject.initMemory(256);
 
 	EXPECT_DEATH(memoryObject.allocate(41, 13), "uAlignment must be power of 2");
+}
+
+TEST_F(NTestMemory, AlignedAllocate2)
+{
+	TestAlignment<256, 2>(413);
+}
+
+TEST_F(NTestMemory, AlignedAllocate16)
+{
+	TestAlignment<256, 16>(41);
+}
+
+TEST_F(NTestMemory, AlignedAllocate256a)
+{
+	TestAlignment<1024, 256>(413);
+}
+
+TEST_F(NTestMemory, AlignedAllocate256b)
+{
+	TestAlignment<256, 256>(413);
 }

@@ -14,10 +14,7 @@ namespace
 	template<size_t V>
 	struct Log2
 	{
-		enum
-		{
-			Value = Log2<V / 2>::Value + 1
-		};
+		enum	{ Value = Log2<V / 2>::Value + 1 };
 		typedef char V_MustBePowerOfTwo[((V & (V - 1)) == 0 ? 1 : -1)];
 	};
 	template<> struct Log2<1> { enum { Value = 0 }; };
