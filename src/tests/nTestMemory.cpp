@@ -1,6 +1,4 @@
 #include <gtest/gtest.h>
-
-#define NSTD_ASSERT
 #include <NLib/Memory/nMemory.hpp>
 #include <NLib/Base/nAssert.hpp>
 
@@ -63,8 +61,8 @@ protected:
 
 TEST_F(NTestMemory, Default)
 {
-	EXPECT_EQ(memoryObject.getAllocatedChunksCount(), 0);
-	EXPECT_EQ(memoryObject.getChunksCount(), 0);
+	EXPECT_EQ(0, memoryObject.getAllocatedChunksCount());
+	EXPECT_EQ(0, memoryObject.getChunksCount());
 }
 
 TEST_F(NTestMemory, EmptyInit)

@@ -1,11 +1,11 @@
 set(NAME nlib-tests)
 
-set(HPP nTestGroupArray.hpp
-		nTestGroupVector.hpp
+set(HPP nTestGroupVector.hpp
 		nTestGroupQueue.hpp)
 
 set(CPP main.cpp
-		nTestMemory.cpp)
+		nTestMemory.cpp
+		nTestArray.cpp)
 
 set(DEPENDENCIES nbase
 				 nmemory
