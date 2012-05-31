@@ -5,7 +5,8 @@ set(HPP nTestGroupVector.hpp
 
 set(CPP main.cpp
 		nTestMemory.cpp
-		nTestArray.cpp)
+		nTestArray.cpp
+		nTestVector.cpp)
 
 set(DEPENDENCIES nbase
 				 nmemory
