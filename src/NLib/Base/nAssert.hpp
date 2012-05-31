@@ -17,7 +17,7 @@
 			static bool bIgnoreAlways = false;\
 			if(!bIgnoreAlways) \
 			{\
-				if(NAssert_StdAssert_val)\
+				if(NLib::NAssert_StdAssert_val)\
 				{\
 					assert(szExpression && szDescription); \
 				}\

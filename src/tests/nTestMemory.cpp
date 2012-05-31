@@ -2,10 +2,36 @@
 
 #define NSTD_ASSERT
 #include <NLib/Memory/nMemory.hpp>
+#include <NLib/Base/nAssert.hpp>
 
 class NTestMemory : public testing::Test
 {
 protected:
+	NLib::NSize_t bytesToChunks(NLib::NSize_t bytes)
+	{
+		NAssert(bytes > 0, "Invalid value");
+		return (bytes - 1) / sizeof(NLib::Memory::MemoryChunk) + 1;
+	}
+
+	// Tests
+	void TestInit(NLib::NSize_t bytes)
+	{
+		EXPECT_EQ(NLib::NRV_SUCCESS, memoryObject.initMemory(bytes));
+		EXPECT_EQ(1, memoryObject.getAllocatedChunksCount());
+		EXPECT_EQ(bytesToChunks(bytes) + 1, memoryObject.getChunksCount());
+	}
+
+	void TestAllocate(NLib::NSize_t bytes)
+	{
+		const NLib::NSize_t INITIAL_ALLOC = 256;
+		memoryObject.initMemory(INITIAL_ALLOC);
+
+		void* pMemory = memoryObject.allocate(bytes);
+		EXPECT_NE((void*)null, pMemory);
+		EXPECT_EQ(bytesToChunks(bytes) + 1, memoryObject.getAllocatedChunksCount());
+		EXPECT_EQ(bytes > INITIAL_ALLOC ? bytesToChunks(bytes) + 2 : bytesToChunks(INITIAL_ALLOC) + 1, memoryObject.getChunksCount());
+	}
+
 	NLib::Memory::NMemory memoryObject;
 };
 
@@ -28,44 +54,32 @@ TEST_F(NTestMemory, DoubleInit)
 
 TEST_F(NTestMemory, Init1)
 {
-	EXPECT_EQ(NLib::NRV_SUCCESS, memoryObject.initMemory(1));
-	EXPECT_EQ(1, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(2, memoryObject.getChunksCount());
+	TestInit(1);
 }
 
 TEST_F(NTestMemory, Init4)
 {
-	EXPECT_EQ(NLib::NRV_SUCCESS, memoryObject.initMemory(4));
-	EXPECT_EQ(1, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(2, memoryObject.getChunksCount());
+	TestInit(4);
 }
 
 TEST_F(NTestMemory, Init8)
 {
-	EXPECT_EQ(NLib::NRV_SUCCESS, memoryObject.initMemory(8));
-	EXPECT_EQ(1, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(2, memoryObject.getChunksCount());
+	TestInit(8);
 }
 
 TEST_F(NTestMemory, Init16)
 {
-	EXPECT_EQ(NLib::NRV_SUCCESS, memoryObject.initMemory(16));
-	EXPECT_EQ(1, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(2, memoryObject.getChunksCount());
+	TestInit(16);
 }
 
 TEST_F(NTestMemory, Init256)
 {
-	EXPECT_EQ(NLib::NRV_SUCCESS, memoryObject.initMemory(256));
-	EXPECT_EQ(1, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
+	TestInit(256);
 }
 
 TEST_F(NTestMemory, Init4681)
 {
-	EXPECT_EQ(NLib::NRV_SUCCESS, memoryObject.initMemory(4681));
-	EXPECT_EQ(1, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(294, memoryObject.getChunksCount());
+	TestInit(4681);
 }
 
 TEST_F(NTestMemory, Release)
@@ -86,12 +100,7 @@ TEST_F(NTestMemory, Allocate0)
 
 TEST_F(NTestMemory, Allocate1)
 {
-	memoryObject.initMemory(256);
-
-	void* pMemory = memoryObject.allocate(1);
-	EXPECT_NE((void*)null, pMemory);
-	EXPECT_EQ(2, memoryObject.getAllocatedChunksCount());
-	EXPECT_EQ(17, memoryObject.getChunksCount());
+	TestAllocate(1);
 }
 
 TEST_F(NTestMemory, Allocate2)
