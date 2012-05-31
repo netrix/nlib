@@ -9,7 +9,7 @@
 		namespace NLib
 		{
 			extern bool NAssertFunction(bool bResult, const char* szExpression, const char* szDescription, const char* szLine, const char* szFilename, const char* szFunction, bool* pbIgnoreAlways);
-			extern bool NAssert_StdAssert;
+			extern bool NAssert_StdAssert_val;
 		}
 
 		#define NAssert(szExpression, szDescription) \
@@ -17,7 +17,7 @@
 			static bool bIgnoreAlways = false;\
 			if(!bIgnoreAlways) \
 			{\
-				if(NAssert_StdAssert)\
+				if(NAssert_StdAssert_val)\
 				{\
 					assert(szExpression && szDescription); \
 				}\
@@ -34,9 +34,13 @@
 				}\
 			}\
 		}
+
+		#define NAssert_StdAssert(val)	NAssert_StdAssert_val = val;
 	#else
 		#define NAssert(expression, szDescription) (__assume(szExpression))
+		#define NAssert_StdAssert(val)
 	#endif
 #else
 	#define NAssert(expression, szDescription) assert(expression && szDescription)
+	#define NAssert_StdAssert(val)
 #endif
