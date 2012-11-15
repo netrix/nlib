@@ -4,7 +4,7 @@ project(NLib)
 # Tests
 option(BUILD_UNITTESTS "Build Unit tests" 0)
 
-if(${BUILD_UNITTESTS})
+if(${NLIB_BUILD_UNITTESTS})
 	add_subdirectory(modules/gtest)
 	include_directories(modules/gtest/include)
 endif()
