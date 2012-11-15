@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(NLib)
 
 # Tests
-option(BUILD_UNITTESTS "Build Unit tests" 0)
+option(NLIB_BUILD_UNITTESTS "Build Unit tests" 0)
 
 if(${NLIB_BUILD_UNITTESTS})
 	add_subdirectory(modules/gtest)
