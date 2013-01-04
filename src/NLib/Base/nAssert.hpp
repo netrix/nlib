@@ -37,7 +37,7 @@
 
 		#define NAssert_StdAssert(val)	NLib::NAssert_StdAssert_val = val;
 	#else
-		#define NAssert(expression, szDescription) (__assume(szExpression))
+		#define NAssert(expression, szDescription) (__assume(expression))
 		#define NAssert_StdAssert(val)
 	#endif
 #else
