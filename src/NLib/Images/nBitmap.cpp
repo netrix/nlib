@@ -150,7 +150,7 @@ namespace Images
 		{
 			(NUint32)(uColorDataOffset + uColorDataSize),
 			{ 0, 0 },
-			uColorDataOffset
+			(NUint32)uColorDataOffset
 		};
 		BitmapInfoHeader bmpInfoHeader =
 		{
@@ -160,7 +160,7 @@ namespace Images
 			1,
 			(NUint16)m_uBitsPerPixel,
 			0,
-			uColorDataSize,
+			(NUint32)uColorDataSize,
 			0,
 			0,
 			0,

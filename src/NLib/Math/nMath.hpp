@@ -272,14 +272,6 @@ namespace Math
 #define NM_IN_EPSILON_F(val) ((val) > -NLib::NM_EPSILON_F) && ((val) < NLib::NM_EPSILON_F)
 #define NM_IN_EPSILON(val) ((val) > -NLib::NM_EPSILON) && ((val) < NLib::NM_EPSILON)
 
-#ifndef min
-#define min(a, b) (((a) < (b)) ? (a) : (b))
-#endif
-
-#ifndef max
-#define max(a, b) (((a) > (b)) ? (a) : (b))
-#endif
-
 #include "nMVector.inl"
 #include "nMVector2f.inl"
 #include "nMVector3f.inl"

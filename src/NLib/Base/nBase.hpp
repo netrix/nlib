@@ -29,17 +29,31 @@ namespace NLib
 	typedef unsigned long long	NUint64;
 #endif
 
-	#ifdef _WIN64
-		typedef NUint64			NSize_t;
-	#else
-		typedef NUint32			NSize_t;
-	#endif
+#if defined(_WIN64) || defined(__amd64__)
+	typedef NUint64			NSize_t;
+#else
+	typedef NUint32			NSize_t;
+#endif
 
-	#ifdef _UNICODE
-		typedef wchar_t			NChar;
-	#else
-		typedef char			NChar;
-	#endif
+#ifdef _UNICODE
+	typedef wchar_t			NChar;
+#else
+	typedef char			NChar;
+#endif
+
+    // Min/Max
+    template<typename T>
+    inline T min(T a, T b)
+    {
+        return a < b ? a : b;
+    }
+
+    template<typename T>
+    inline T max(T a, T b)
+    {
+        return a > b ? a : b;
+    }
+
 }
 
 #define NMAX_UINT32 0xffffffffu
@@ -96,10 +110,4 @@ namespace NLib
 #define	NEndianSwap16(type)  (((type >> 8) & 0x00ff) | ((type << 8) & 0xff00))
 #define	NEndianSwap32(type)  (((type >> 24) & 0x000000ff) | ((type >> 8) & 0x0000ff00) | ((type << 8) & 0x00ff0000) | ((type <<24) & 0xff000000))
 
-// Min/Max
-#ifndef min
-	#define min(a, b) ((a) < (b) ? (a) : (b))
-#endif
-#ifndef max
-	#define max(a,b) ((a) > (b) ? (a) : (b))
-#endif
+
