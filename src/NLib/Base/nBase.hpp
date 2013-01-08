@@ -5,6 +5,14 @@
 	#include <stdlib.h>	// int posix_memalign(void **memptr, size_t alignment, size_t size);
 #endif
 
+// Undef min/max
+#ifdef min
+	#undef min
+#endif
+#ifdef max
+	#undef max
+#endif
+
 namespace NLib
 {
 #ifdef _MSC_VER
