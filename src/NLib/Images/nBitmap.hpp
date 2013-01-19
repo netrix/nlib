@@ -21,8 +21,8 @@ namespace Images
 		struct BitmapInfoHeader
 		{
 			NUint32 uHeaderSize;			// This header size
-			NInt32 uWidth;
-			NInt32 uHeight;
+			NUint32 uWidth;
+			NUint32 uHeight;
 			NUint16 uNPlanes;				// must be 1
 			NUint16 uBitsPerPixel;		// in this class
 			NUint32 uCompressType;		// Typical bitmap 0 - RGB

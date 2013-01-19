@@ -10,6 +10,6 @@ namespace NLib
 
 	private:
 		NNonCopyable(const NNonCopyable&) {}
-		const NNonCopyable& operator=(const NNonCopyable&) {}
+		const NNonCopyable& operator=(const NNonCopyable&) { return *this; }
 	};
 }

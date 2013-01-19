@@ -226,7 +226,7 @@ namespace Math
 	NMGlobalConst __NVec4fv NMCVector3fOne			= { 1.0f, 1.0f, 1.0f, 0.0f };
 	NMGlobalConst __NVec4fv NMCVector4fNegOne3One	= { -1.0f, -1.0f, -1.0f, 1.0f };
 
-	NMGlobalConst __NVec4iv NMCVector4fFull			= { 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff };
+	NMGlobalConst __NVec4uv NMCVector4fFull			= { 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff };
 
 #ifdef _SSE_ENABLED
 	NMGlobalConst __NVec4iv NMCVector3fTruncMask	= { 0xffffffff, 0xffffffff, 0xffffffff, 0x00000000 };
