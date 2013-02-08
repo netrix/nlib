@@ -1,7 +1,11 @@
-set(HPP nArray.hpp
+set(SOURCES nArray.hpp
 		nContainerGuard.hpp
 		nQueue.hpp
 		nStableVector.hpp
 		nVector.hpp)
 
-install(FILES ${HPP} DESTINATION include/NLib/Containers)
+set(NAME "ncontainers")
+
+add_custom_target(${NAME} SOURCES ${SOURCES})
+		
+install(FILES ${SOURCES} DESTINATION include/NLib/Containers)
