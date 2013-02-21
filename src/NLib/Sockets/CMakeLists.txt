@@ -1,9 +1,9 @@
 set(SOURCES
    nCommon.hpp
-   nClient.hpp
-   nClient.cpp
-   nServer.hpp
-   nServer.cpp
+   nClientSocket.hpp
+   nClientSocket.cpp
+   nServerSocket.hpp
+   nServerSocket.cpp
 )
 
 set(NAME "nsockets")
