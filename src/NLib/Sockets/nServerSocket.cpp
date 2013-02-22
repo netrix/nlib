@@ -37,7 +37,7 @@ SocketServer::~SocketServer()
    release(); 
 }
 
-bool SocketServer::initServer(unsigned short uPort, NUint32 uMaxConn)
+bool SocketServer::initServer(NUint16 uPort, NUint32 uMaxConn)
 {
    m_pServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
    if(m_pServerSocket == INVALID_SOCKET)

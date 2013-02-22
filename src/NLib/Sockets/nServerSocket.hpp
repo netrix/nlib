@@ -19,7 +19,7 @@ namespace Sockets
       SocketServer();
       ~SocketServer();
 
-      bool initServer(unsigned short uPort, NUint32 uMaxConn);
+      bool initServer(NUint16 uPort, NUint32 uMaxConn);
 
       void release();
 

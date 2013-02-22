@@ -33,7 +33,8 @@ namespace Memory
 		NSize_t getChunksCount() const				{ return m_uNumChunks; }
 		NSize_t getAllocatedChunksCount() const		{ return m_uNumUsedChunks; }
 
-		bool	outOfMemory()	{ return m_bOutOfMemory; }
+		bool	outOfMemory()	   { return m_bOutOfMemory; }
+      bool  isInitializated() { return m_pHeads == null; }
 
 	private:
 		MemoryChunk*	allocateChunks(NSize_t uChunksCount);						// Must be complemented to chunks
@@ -50,18 +51,19 @@ namespace Memory
 
 		bool	m_bOutOfMemory;
 
-	public:
+   private:
 		static NMemory m_instance;
 
 	public:
-		static NRESULT	InitMemory(NSize_t uReservationSize = 16)				{ return m_instance.initMemory(uReservationSize); }
-		static void		ReleaseMemory()											{ m_instance.releaseMemory(); }
-		static void*	Allocate(NSize_t uAllocationSize)						{ return m_instance.allocate(uAllocationSize); }
-		static void*	Allocate(NSize_t uAllocationSize, NSize_t uAlignment)	{ return m_instance.allocate(uAllocationSize, uAlignment); }
-		static void		Release(void* pMemory)									{ m_instance.release(pMemory); }
-		static NSize_t	GetChunksCount()										{ return m_instance.getChunksCount(); }
-		static NSize_t	GetAllocatedChunksCount()								{ return m_instance.getAllocatedChunksCount(); }
-		static bool		OutOfMemory()											{ return m_instance.outOfMemory(); }
+      static NMemory& GetGlobalInstance();
+		static NRESULT	InitMemory(NSize_t uReservationSize = 16)				   { return m_instance.initMemory(uReservationSize); }
+		static void		ReleaseMemory()											      { GetGlobalInstance().releaseMemory(); }
+		static void*	Allocate(NSize_t uAllocationSize)						   { return GetGlobalInstance().allocate(uAllocationSize); }
+		static void*	Allocate(NSize_t uAllocationSize, NSize_t uAlignment)	{ return GetGlobalInstance().allocate(uAllocationSize, uAlignment); }
+		static void		Release(void* pMemory)									      { GetGlobalInstance().release(pMemory); }
+		static NSize_t	GetChunksCount()										         { return GetGlobalInstance().getChunksCount(); }
+		static NSize_t	GetAllocatedChunksCount()								      { return GetGlobalInstance().getAllocatedChunksCount(); }
+		static bool		OutOfMemory()											         { return GetGlobalInstance().outOfMemory(); }
 	};
 }
 }
