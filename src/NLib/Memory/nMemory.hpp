@@ -51,7 +51,7 @@ namespace Memory
 
 		bool	m_bOutOfMemory;
 
-   private:
+   public:
 		static NMemory m_instance;
 
 	public:

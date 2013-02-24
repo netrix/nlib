@@ -7,7 +7,7 @@ License:	GNU GPL
 
 *********************************************************************/
 
-#include "nClient.hpp"
+#include "nClientSocket.hpp"
 //#include <string.h>
 #include <stdio.h>
 #include <NLib/Base/nLogger.hpp>
