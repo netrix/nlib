@@ -108,7 +108,10 @@ bool SocketServer::checkRequest()
 	{
 		m_pClientSocket = accept(m_pServerSocket, (sockaddr*)&m_adrClient, &m_adrClientSize);
 	}
-	return !(m_bValid = m_pClientSocket > 0);
+
+   m_bValid = m_pClientSocket > 0;
+
+   return m_bValid;
 }
 
 bool SocketServer::sendResponse(const void* pData, NUint32 uDataSize)
