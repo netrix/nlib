@@ -9,15 +9,16 @@ License:	GNU GPL
 #pragma once
 
 #include "nCommon.hpp"
+#include "nSocket.hpp"
 
 namespace NLib {
 namespace Sockets
 {
-   class SocketServer
+   class SocketServer : public Socket
    {
    public:
       SocketServer();
-      ~SocketServer();
+      virtual ~SocketServer();
 
       bool initServer(NUint16 uPort, NUint32 uMaxConn);
 

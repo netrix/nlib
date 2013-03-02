@@ -9,15 +9,16 @@ License:	GNU GPL
 #pragma once
 
 #include "nCommon.hpp"
+#include "nSocket.hpp"
 
 namespace NLib {
 namespace Sockets
 {
-   class SocketClient
+   class SocketClient : public Socket
    {
    public:
       SocketClient();
-      ~SocketClient();
+      virtual ~SocketClient();
 
       bool	initClient(const char* szServerIPAddress, NUint16 uPort);
       void	initClient(SOCKET pSocket, sockaddr_in& adr);

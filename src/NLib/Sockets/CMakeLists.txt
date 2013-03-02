@@ -4,6 +4,8 @@ set(SOURCES
    nClientSocket.cpp
    nServerSocket.hpp
    nServerSocket.cpp
+   nSocket.cpp
+   nSocket.hpp
 )
 
 set(NAME "nsockets")
