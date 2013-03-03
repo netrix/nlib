@@ -14,18 +14,18 @@ License:	GNU GPL
 namespace NLib {
 namespace Sockets
 {
-   class SocketClient : public Socket
+   class ClientSocket : public Socket
    {
    public:
-      SocketClient();
-      virtual ~SocketClient();
+      ClientSocket();
+      virtual ~ClientSocket();
 
       bool	initClient(const char* szServerIPAddress, NUint16 uPort);
       void	initClient(SOCKET pSocket, sockaddr_in& adr);
       void	release();
 
-      bool	sendRequest(const void* pData, NUint32 uDataSize);
-      bool	getResponse(void* pBuffer, NUint32 uBufferSize);
+      bool	send(const void* pData, NUint32 uDataSize);
+      bool	receive(void* pBuffer, NUint32 uBufferSize);
 
       bool	isValid() const;
 

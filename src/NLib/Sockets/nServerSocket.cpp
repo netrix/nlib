@@ -27,17 +27,17 @@ namespace NLib {
 namespace Sockets
 {
 
-SocketServer::SocketServer() 
+ServerSocket::ServerSocket() 
    : m_bValid(false) 
 {
 }
 
-SocketServer::~SocketServer() 
+ServerSocket::~ServerSocket() 
 { 
    release(); 
 }
 
-bool SocketServer::initServer(NUint16 uPort, NUint32 uMaxConn)
+bool ServerSocket::initServer(NUint16 uPort, NUint32 uMaxConn)
 {
    m_pServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
    if(m_pServerSocket == INVALID_SOCKET)
@@ -88,13 +88,13 @@ bool SocketServer::initServer(NUint16 uPort, NUint32 uMaxConn)
    return false;
 }
 
-void SocketServer::release()
+void ServerSocket::release()
 {
 	closesocket(m_pClientSocket);
 	m_bValid = false;
 }
 
-bool SocketServer::checkRequest()
+bool ServerSocket::checkRequest()
 {
 	m_adrClientSize = sizeof(m_adrClient);
 	timeval t = { 2 };
@@ -114,32 +114,32 @@ bool SocketServer::checkRequest()
    return m_bValid;
 }
 
-bool SocketServer::sendResponse(const void* pData, NUint32 uDataSize)
+bool ServerSocket::sendResponse(const void* pData, NUint32 uDataSize)
 {
    return send(m_pClientSocket, (const char*)pData, uDataSize, 0) == SOCKET_ERROR;
 }
 
-void SocketServer::shutRequest()
+void ServerSocket::shutRequest()
 {
    closesocket(m_pClientSocket);
 }
 
-bool SocketServer::isValid() const 
+bool ServerSocket::isValid() const 
 { 
    return m_bValid; 
 }
 
-SOCKET SocketServer::getClientSocket()
+SOCKET ServerSocket::getClientSocket()
 { 
    return m_pClientSocket;
 }
 
-void SocketServer::getClientAddr(sockaddr_in* pAddr)	
+void ServerSocket::getClientAddr(sockaddr_in* pAddr)	
 { 
    *pAddr = m_adrClient; 
 }
 
-NUint32 SocketServer::getMaxConnections() const
+NUint32 ServerSocket::getMaxConnections() const
 { 
    return m_uMaxConn; 
 }

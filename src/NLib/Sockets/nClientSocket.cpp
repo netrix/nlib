@@ -27,17 +27,17 @@ namespace NLib {
 namespace Sockets
 {
 
-SocketClient::SocketClient()
+ClientSocket::ClientSocket()
    : m_bValid(false) 
 {
 }
 
-SocketClient::~SocketClient()
+ClientSocket::~ClientSocket()
 {
    release(); 
 }
 
-bool SocketClient::initClient(const char* szServerIPAddress, NUint16 uPort)
+bool ClientSocket::initClient(const char* szServerIPAddress, NUint16 uPort)
 {
    // Getting address from DNS
    char szPort[8];
@@ -109,51 +109,47 @@ bool SocketClient::initClient(const char* szServerIPAddress, NUint16 uPort)
    return false;
 }
 
-void SocketClient::initClient(SOCKET pSocket, sockaddr_in& adr)
+void ClientSocket::initClient(SOCKET pSocket, sockaddr_in& adr)
 {
    m_pClientSocket = pSocket;
    m_adrInfo = adr;
    m_bValid = true;
 }
 
-void SocketClient::release()
+void ClientSocket::release()
 {
    closesocket(m_pClientSocket);
    m_bValid = false;
 }
 
-bool SocketClient::sendRequest(const void* pData, NUint32 uDataSize)
+bool ClientSocket::send(const void* pData, NUint32 uDataSize)
 {
-   m_bValid = send(m_pClientSocket, (const char*)pData, uDataSize, MSG_NOSIGNAL) != SOCKET_ERROR;
+   m_bValid = ::send(m_pClientSocket, (const char*)pData, uDataSize, MSG_NOSIGNAL) != SOCKET_ERROR;
 
    return m_bValid;
 }
 
-bool SocketClient::getResponse(void* pBuffer, NUint32 uBufferSize)
+bool ClientSocket::receive(void* pBuffer, NUint32 uBufferSize)
 {
-   //int ret = recv(m_pClientSocket, (char*)pBuffer, uBufferSize, MSG_WAITALL | MSG_NOSIGNAL);
-   //m_bValid = ret >= 0;
-   //return !(ret > 0);
-
-   NInt32 uResult = 0;
+   NInt32 iResult = 0;
    do
    {
-      uResult = recv(m_pClientSocket, (char*)pBuffer, uBufferSize, MSG_NOSIGNAL);
+      iResult = recv(m_pClientSocket, (char*)pBuffer, uBufferSize, MSG_NOSIGNAL);
 
-      if(uResult <= 0)	
+      if(iResult <= 0)	
       { 
          m_bValid = false; 
          return true; 
       }
-      uBufferSize -= uResult;
-      pBuffer = (char*)pBuffer + uResult;
+      uBufferSize -= iResult;
+      pBuffer = (char*)pBuffer + iResult;
    }
    while(uBufferSize > 0);
 
    return false;
 }
 
-bool SocketClient::isValid() const
+bool ClientSocket::isValid() const
 { 
    return m_bValid; 
 }

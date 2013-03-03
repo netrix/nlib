@@ -14,11 +14,11 @@ License:	GNU GPL
 namespace NLib {
 namespace Sockets
 {
-   class SocketServer : public Socket
+   class ServerSocket : public Socket
    {
    public:
-      SocketServer();
-      virtual ~SocketServer();
+      ServerSocket();
+      virtual ~ServerSocket();
 
       bool initServer(NUint16 uPort, NUint32 uMaxConn);
 
